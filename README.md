@@ -24,6 +24,13 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 - Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
 
+## Database workflow
+
+- db:migrate — Generates and applies versioned migrations (creates files under prisma/migrations) and updates the database/schema history. Use this for shared environments and after any schema change you want to commit. In production CI, prefer `prisma migrate deploy` to apply already-committed migrations.
+- db:push — Pushes schema changes directly to the database without creating migration files. Great for local prototyping or ephemeral test databases; avoid using in production or shared environments.
+
+See details: [db:migrate vs db:push](doc/task-2-database-and-models.md#dbmigrate-vs-dbpush)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

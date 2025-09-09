@@ -22,7 +22,9 @@ jobs:
         run: npm install
 
       - name: Resolve Biome version from package.json
-        run: echo "BIOME_VERSION=$(node -p \"require('./package.json').devDependencies['@biomejs/biome']\")" >> $GITHUB_ENV
+        id: biome
+        run: |
+          echo "version=$(node -p \"require('./package.json').devDependencies['@biomejs/biome']\")" >> "$GITHUB_OUTPUT"
 
       - name: Run Biome check (via npx to ensure correct platform binary)
-        run: npx -y @biomejs/biome@${{ env.BIOME_VERSION }} check .
+        run: npx -y @biomejs/biome@${{ steps.biome.outputs.version }} check .

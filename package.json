@@ -10,6 +10,8 @@
 		"fix": "biome check --write .",
 		"prepare": "husky",
 		"postinstall": "prisma generate",
+		"db:migrate": "prisma migrate dev",
+		"db:push": "prisma db push",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},

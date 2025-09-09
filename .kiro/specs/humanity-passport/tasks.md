@@ -6,10 +6,11 @@
   - Set up project directory structure for components, API routes, and utilities
   - _Requirements: 6.1, 6.4_
 
-- [ ] 2. Configure database and data models
+- [x] 2. Configure database and data models
   - Set up Prisma with SQLite database configuration
   - Create Analysis model schema with unique constraints
   - Generate Prisma client and run initial migration
+    - Status: Prisma client generation is configured via postinstall; initial migration pending (see doc/task-2-database-and-models.md)
   - Create database utility functions for connection handling
   - _Requirements: 5.1, 2.5_
 

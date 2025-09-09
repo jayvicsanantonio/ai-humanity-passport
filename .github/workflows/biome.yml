@@ -26,5 +26,10 @@ jobs:
         run: |
           node -e "const fs=require('fs');const v=require('./package-lock.json').packages['node_modules/@biomejs/biome'].version;fs.appendFileSync(process.env.GITHUB_OUTPUT,'version='+v+'\n');"
 
-      - name: Run Biome check (via npx ephemeral install to avoid local devDependency)
-        run: npx -y -p @biomejs/biome@${{ steps.biome.outputs.version }} biome check .
+      - name: Setup Biome CLI
+        uses: biomejs/setup-biome@v2
+        with:
+          version: ${{ steps.biome.outputs.version }}
+
+      - name: Run Biome check
+        run: biome check .

@@ -15,5 +15,15 @@
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git"
+	},
+	"files": {
+		"includes": [
+			"src/**",
+			"vitest.config.*",
+			"postcss.config.*",
+			"tailwind.config.*",
+			"next.config.*",
+			"*.{ts,tsx,js,jsx,mjs,cjs,json,jsonc,md,css}"
+		]
 	}
 }

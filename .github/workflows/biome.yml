@@ -21,10 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Resolve Biome version from package.json
+      - name: Resolve Biome version from package-lock.json (exact)
         id: biome
         run: |
-          node -e "const fs=require('fs');const v=require('./package.json').devDependencies['@biomejs/biome'];fs.appendFileSync(process.env.GITHUB_OUTPUT,'version='+v+'\n');"
+          node -e "const fs=require('fs');const v=require('./package-lock.json').packages['node_modules/@biomejs/biome'].version;fs.appendFileSync(process.env.GITHUB_OUTPUT,'version='+v+'\n');"
 
-      - name: Run Biome check (via npx to ensure correct platform binary)
-        run: npx -y @biomejs/biome@${{ steps.biome.outputs.version }} check .
+      - name: Run Biome check (via npx ephemeral install to avoid local devDependency)
+        run: npx -y -p @biomejs/biome@${{ steps.biome.outputs.version }} biome check .

@@ -22,6 +22,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Project Documentation
 
+- Task 1 — Project Structure and Core Dependencies: [doc/task-1-project-setup.md](doc/task-1-project-setup.md)
 - Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
 
 ## Database workflow

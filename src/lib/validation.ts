@@ -8,16 +8,17 @@
  * @returns boolean indicating if the URL is valid
  */
 export function validateGitHubUrl(url: string): boolean {
-  if (!url || typeof url !== 'string') {
-    return false;
-  }
+	if (!url || typeof url !== "string") {
+		return false;
+	}
 
-  const trimmedUrl = url.trim();
-  
-  // GitHub repository URL pattern: https://github.com/owner/repo
-  const githubUrlPattern = /^https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+\/?$/;
-  
-  return githubUrlPattern.test(trimmedUrl);
+	const trimmedUrl = url.trim();
+
+	// GitHub repository URL pattern: https://github.com/owner/repo
+	const githubUrlPattern =
+		/^https:\/\/github\.com\/[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+\/?$/;
+
+	return githubUrlPattern.test(trimmedUrl);
 }
 
 /**
@@ -25,22 +26,26 @@ export function validateGitHubUrl(url: string): boolean {
  * @param url - The GitHub repository URL
  * @returns Object with owner and repo, or null if invalid
  */
-export function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
-  if (!validateGitHubUrl(url)) {
-    return null;
-  }
+export function parseGitHubUrl(
+	url: string,
+): { owner: string; repo: string } | null {
+	if (!validateGitHubUrl(url)) {
+		return null;
+	}
 
-  const trimmedUrl = url.trim().replace(/\/$/, ''); // Remove trailing slash
-  const match = trimmedUrl.match(/^https:\/\/github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)$/);
-  
-  if (!match) {
-    return null;
-  }
+	const trimmedUrl = url.trim().replace(/\/$/, ""); // Remove trailing slash
+	const match = trimmedUrl.match(
+		/^https:\/\/github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)$/,
+	);
 
-  return {
-    owner: match[1],
-    repo: match[2]
-  };
+	if (!match) {
+		return null;
+	}
+
+	return {
+		owner: match[1],
+		repo: match[2],
+	};
 }
 
 /**
@@ -49,22 +54,23 @@ export function parseGitHubUrl(url: string): { owner: string; repo: string } | n
  * @returns Object with isValid boolean and error message if invalid
  */
 export function validateRepositorySubmission(repoUrl: string): {
-  isValid: boolean;
-  error?: string;
+	isValid: boolean;
+	error?: string;
 } {
-  if (!repoUrl || !repoUrl.trim()) {
-    return {
-      isValid: false,
-      error: "Please enter a GitHub repository URL"
-    };
-  }
+	if (!repoUrl || !repoUrl.trim()) {
+		return {
+			isValid: false,
+			error: "Please enter a GitHub repository URL",
+		};
+	}
 
-  if (!validateGitHubUrl(repoUrl)) {
-    return {
-      isValid: false,
-      error: "Please enter a valid GitHub repository URL (e.g., https://github.com/owner/repo)"
-    };
-  }
+	if (!validateGitHubUrl(repoUrl)) {
+		return {
+			isValid: false,
+			error:
+				"Please enter a valid GitHub repository URL (e.g., https://github.com/owner/repo)",
+		};
+	}
 
-  return { isValid: true };
+	return { isValid: true };
 }

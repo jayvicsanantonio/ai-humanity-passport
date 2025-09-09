@@ -19,7 +19,17 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
+
+      - name: Resolve Biome version from package-lock.json (exact)
+        id: biome
+        run: |
+          node -e "const fs=require('fs');const v=require('./package-lock.json').packages['node_modules/@biomejs/biome'].version;fs.appendFileSync(process.env.GITHUB_OUTPUT,'version='+v+'\n');"
+
+      - name: Setup Biome CLI
+        uses: biomejs/setup-biome@v2
+        with:
+          version: ${{ steps.biome.outputs.version }}
 
       - name: Run Biome check
-        run: npm run lint
+        run: biome check .

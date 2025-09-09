@@ -27,7 +27,7 @@ export default function Home() {
 		const validation = validateRepositorySubmission(repoUrl);
 
 		if (!validation.isValid) {
-			setError(validation.error!);
+			setError(validation.error ?? "Invalid repository URL");
 			return;
 		}
 

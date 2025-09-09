@@ -24,7 +24,7 @@ jobs:
       - name: Resolve Biome version from package.json
         id: biome
         run: |
-          echo "version=$(node -p \"require('./package.json').devDependencies['@biomejs/biome']\")" >> "$GITHUB_OUTPUT"
+          node -e "const fs=require('fs');const v=require('./package.json').devDependencies['@biomejs/biome'];fs.appendFileSync(process.env.GITHUB_OUTPUT,'version='+v+'\n');"
 
       - name: Run Biome check (via npx to ensure correct platform binary)
         run: npx -y @biomejs/biome@${{ steps.biome.outputs.version }} check .

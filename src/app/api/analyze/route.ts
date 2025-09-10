@@ -122,40 +122,34 @@ export async function POST(request: Request) {
 		// Use original casing for GitHub API fetch (API is case-insensitive, but original is fine)
 		const { metadata, readme } = await fetchRepoData(octokit, owner, repo);
 
-		return json({
-			owner: ownerLc,
-			repo: repoLc,
+		const analysis = await analyzeRepositoryWithGroq(null, {
 			metadata,
 			readme,
 		});
-		// const analysis = await analyzeRepositoryWithGroq(null, {
-		//   metadata,
-		//   readme,
-		// });
 
-		// await prisma.analysis.upsert({
-		//   where: { owner_repo: { owner: ownerLc, repo: repoLc } },
-		//   update: {
-		//     verdict: analysis.verdict,
-		//     details: analysis.details,
-		//   },
-		//   create: {
-		//     owner: ownerLc,
-		//     repo: repoLc,
-		//     verdict: analysis.verdict,
-		//     details: analysis.details,
-		//   },
-		// });
+		await prisma.analysis.upsert({
+			where: { owner_repo: { owner: ownerLc, repo: repoLc } },
+			update: {
+				verdict: analysis.verdict,
+				details: analysis.details,
+			},
+			create: {
+				owner: ownerLc,
+				repo: repoLc,
+				verdict: analysis.verdict,
+				details: analysis.details,
+			},
+		});
 
-		// return json(
-		//   {
-		//     owner: ownerLc,
-		//     repo: repoLc,
-		//     verdict: analysis.verdict,
-		//     details: analysis.details,
-		//   },
-		//   { status: 200 },
-		// );
+		return json(
+			{
+				owner: ownerLc,
+				repo: repoLc,
+				verdict: analysis.verdict,
+				details: analysis.details,
+			},
+			{ status: 200 },
+		);
 	} catch (err: any) {
 		// Map known errors
 		if (err instanceof GitHubApiError) {

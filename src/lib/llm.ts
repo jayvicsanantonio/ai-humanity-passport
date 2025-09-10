@@ -160,7 +160,7 @@ export async function analyzeRepositoryWithGroq(
 ): Promise<AnalysisResult> {
 	const groq = client ?? createGroqClient();
 
-	const model = options?.model ?? "gpt-oss-20b"; // per requirements
+	const model = options?.model ?? "openai/gpt-oss-20b";
 	const temperature = options?.temperature ?? 0.2;
 	const max_tokens = options?.maxTokens ?? 1024;
 	const attempts = Math.max(1, options?.attempts ?? 3);

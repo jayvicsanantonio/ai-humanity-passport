@@ -27,6 +27,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Task 3 — GitHub API Integration Utilities: [doc/task-3-github-api-integration.md](doc/task-3-github-api-integration.md)
 - Task 4 — Groq LLM Integration: [doc/task-4-groq-llm-integration.md](doc/task-4-groq-llm-integration.md)
 - Task 5 — Repository Analysis API Endpoint: [doc/task-5-analysis-api.md](doc/task-5-analysis-api.md)
+- Task 6 — Dynamic Badge Generation: [doc/task-6-badge-generation.md](doc/task-6-badge-generation.md)
 
 ## Environment setup
 

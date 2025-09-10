@@ -35,10 +35,11 @@ function svgResponse(content: string, req: Request): Response {
 
 export async function GET(
 	req: Request,
-	ctx: { params: { owner: string; repo: string } },
+	ctx: { params: Promise<{ owner: string; repo: string }> },
 ) {
-	const ownerParam = ctx.params.owner ?? "";
-	const repoParam = ctx.params.repo ?? "";
+	const { owner: ownerParamRaw, repo: repoParamRaw } = await ctx.params;
+	const ownerParam = ownerParamRaw ?? "";
+	const repoParam = repoParamRaw ?? "";
 
 	if (!isValidSlug(ownerParam) || !isValidSlug(repoParam)) {
 		// Return a small pending badge for invalid inputs (don't leak details)

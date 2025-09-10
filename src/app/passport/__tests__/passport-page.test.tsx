@@ -68,14 +68,14 @@ describe("PassportPage", () => {
 
 		expect(screen.getByText("Humanity Passport")).toBeInTheDocument();
 		expect(screen.getByText("testowner/testrepo")).toBeInTheDocument();
-		expect(screen.getByText("Analysis Result: Approved")).toBeInTheDocument();
+		expect(screen.getByText("Humanity Passport Approved")).toBeInTheDocument();
 		expect(
 			screen.getByText(
 				"This repository contributes positively to humanity through its educational content.",
 			),
 		).toBeInTheDocument();
 		expect(screen.getByTestId("badge")).toBeInTheDocument();
-		expect(screen.getByText("Embed Badge")).toBeInTheDocument();
+		expect(screen.getByText("Embed Your Badge")).toBeInTheDocument();
 		expect(screen.getByTestId("copy-button")).toBeInTheDocument();
 	});
 
@@ -100,7 +100,7 @@ describe("PassportPage", () => {
 		render(component);
 
 		expect(
-			screen.getByText("Analysis Result: Not Approved"),
+			screen.getByText("Not Approved for Humanity Passport"),
 		).toBeInTheDocument();
 		expect(
 			screen.getByText(

@@ -55,7 +55,6 @@ export async function GET(
 	const repoLc = repoParam.toLowerCase();
 
 	try {
-		
 		const analysis = await prisma.analysis.findUnique({
 			where: { owner_repo: { owner: ownerLc, repo: repoLc } },
 			select: { verdict: true },

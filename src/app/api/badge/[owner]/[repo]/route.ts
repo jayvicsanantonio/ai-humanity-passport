@@ -66,7 +66,7 @@ export async function GET(
 
 		const content = generateBadgeSVG({ owner: ownerLc, repo: repoLc, state });
 		return svgResponse(content, req);
-	} catch (err) {
+	} catch (_err) {
 		// On DB errors, serve a pending badge to avoid leaking server details
 		const content = generateBadgeSVG({
 			owner: ownerLc,

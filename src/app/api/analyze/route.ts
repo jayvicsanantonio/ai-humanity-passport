@@ -47,7 +47,7 @@ function allowRequest(ip: string): boolean {
 
 const AnalyzeRequestSchema = z.object({
 	repoUrl: z
-		.string({ required_error: "Please enter a GitHub repository URL" })
+		.string()
 		.min(1, "Please enter a GitHub repository URL")
 		.refine((url) => validateGitHubUrl(url), {
 			message:

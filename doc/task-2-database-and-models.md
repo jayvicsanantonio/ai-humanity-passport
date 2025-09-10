@@ -1,21 +1,28 @@
 # Task 2 — Database and Data Models
 
-This document describes the implementation for Task 2 in .kiro/specs/humanity-passport/tasks.md: configuring the database with Prisma + SQLite, defining the Analysis model, generating the Prisma client, and providing a re-usable database utility for connection handling.
+This document describes the implementation for Task 2 in .kiro/specs/humanity-passport/tasks.md: configuring the database with Prisma + PostgreSQL (Prisma Postgres), defining the Analysis model, generating the Prisma client, and providing a re-usable database utility for connection handling.
 
 Status summary
-- Prisma + SQLite configured (generator + datasource)
+- Prisma + PostgreSQL configured (generator + datasource)
 - Analysis model created with unique constraint on (owner, repo) and mapped table name
 - Prisma client auto-generated on install (via postinstall)
 - Database utility added at src/lib/db.ts for safe, singleton client usage in Next.js
 - Migrations: initial migration not yet committed; see Commands section below
 
 Schema
-- Provider: sqlite
-- Data source URL: DATABASE_URL environment variable
+- Provider: postgresql
+- Data source URL: DATABASE_URL environment variable (pooled/Accelerate)
+- directUrl: DIRECT_URL environment variable (direct connection for migrations)
 - Table name: analyses (mapped from Prisma model Analysis)
 - Unique constraint: owner + repo
 
-```prisma path=/Users/jayvicsanantonio/Developer/ai-humanity-passport/prisma/schema.prisma start=13
+```prisma path=/Users/jayvicsanantonio/Developer/ai-humanity-passport/prisma/schema.prisma start=4
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
 model Analysis {
   id        Int      @id @default(autoincrement())
   owner     String
@@ -58,26 +65,35 @@ Environment configuration
 - Create a .env file at the project root with:
 
 ```bash path=null start=null
-DATABASE_URL="file:./prisma/dev.db"
+# Prisma Postgres (example placeholders)
+DATABASE_URL="prisma://accelerate.prisma-data.net/your-project?api_key=..." # pooled/Accelerate URL used at runtime
+DIRECT_URL="postgresql://USER:PASSWORD@HOST:PORT/DB?sslmode=require"     # direct connection for migrations
 ```
 
-- For production, use a separate database file/path or a managed database and set DATABASE_URL accordingly.
+- On Vercel, add the same variables in Project Settings → Environment Variables for Development, Preview, and Production.
+- If you are using a provider like Vercel Postgres/Neon instead of Prisma Postgres, use their pooled and non-pooled URLs and map them to DATABASE_URL and DIRECT_URL respectively.
 
 Commands
 - Generate Prisma client (also runs automatically after npm install via postinstall):
 
 ```bash path=null start=null
-npx prisma generate
+npx prisma generate --no-engine
 ```
 
 - Create and apply initial migration (recommended for shared environments/CI):
 
 ```bash path=null start=null
 # Prompts for a migration name; use e.g. "init"
-npx prisma migrate dev
+npx prisma migrate dev --name init
 ```
 
-- Alternatively, for local-only schema syncing without migrations:
+- Deploy already-committed migrations (CI/Vercel):
+
+```bash path=null start=null
+npx prisma migrate deploy
+```
+
+- Alternatively, for local-only schema syncing without migrations (avoid in shared/prod):
 
 ```bash path=null start=null
 npx prisma db push
@@ -111,8 +127,8 @@ db:migrate vs db:push
 
 Notes and best practices
 - Next.js runtime: Use Node.js runtime for routes that access Prisma (not edge). If you create route handlers under app/api, set `export const runtime = "nodejs"` if needed.
-- Connection reuse: The db utility caches the client in development via globalThis to prevent too many open handles during hot reload.
-- Testing: For unit/integration tests that require a database, you can use a fresh SQLite file per test run, or an in-memory SQLite URL (e.g., `file:memory:?cache=shared`) with proper Prisma configuration. Remember to run `prisma db push` before tests to provision schema when not using migrations.
+- Connection reuse & pooling: Keep the singleton client pattern in `src/lib/db.ts`. In serverless (Vercel), always use a pooled/Accelerate URL at runtime. Use a direct URL only for migrations/administration.
+- Testing: Use a separate Postgres database for tests (local Docker or a managed test DB). Before running tests, apply migrations with `prisma migrate deploy` against the test DATABASE_URL.
 - Unique constraint: The `(owner, repo)` unique constraint enforces a single analysis per repository. If you later add versioning/history, consider an additional table or a composite key with a timestamp/version field.
 - Table mapping: The model is mapped to `analyses` to keep the database table name explicit and pluralized.
 

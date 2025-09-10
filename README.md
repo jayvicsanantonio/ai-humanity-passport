@@ -20,6 +20,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Project Documentation
+
+- Task 1 — Project Structure and Core Dependencies: [doc/task-1-project-setup.md](doc/task-1-project-setup.md)
+- Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
+
+## Database workflow (PostgreSQL via Prisma)
+
+- db:migrate — Generates and applies versioned migrations (creates files under prisma/migrations) and updates the database/schema history. Use this for shared environments and after any schema change you want to commit. In production CI and during Vercel deploys, prefer `prisma migrate deploy` to apply already-committed migrations.
+- db:migrate:deploy — Applies already-committed migrations without creating new ones. Use this in CI and Vercel deployments.
+- db:reset — Resets the database (drops and re-applies all migrations). Useful for local development only.
+- db:push — Pushes schema changes directly to the database without creating migration files. Useful for quick experiments; avoid using this in production or shared environments.
+
+Environment variables (local development):
+- DATABASE_URL: pooled or Accelerate URL used by the app at runtime.
+- DIRECT_URL: direct connection URL used by Prisma Migrate and admin tools.
+
+Pooling on Vercel:
+- Serverless environments open many short-lived connections; use a pooler. If you use Prisma Postgres, pooling is built in (via Accelerate). If you use another Postgres provider, use connection pooling (e.g., PgBouncer) or Prisma Accelerate.
+
+See details: [db:migrate vs db:push](doc/task-2-database-and-models.md#dbmigrate-vs-dbpush)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

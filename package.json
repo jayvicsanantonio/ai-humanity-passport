@@ -9,13 +9,18 @@
 		"lint": "biome check .",
 		"fix": "biome check --write .",
 		"prepare": "husky",
-		"postinstall": "prisma generate",
+		"postinstall": "prisma generate --no-engine",
+		"db:migrate": "prisma migrate dev",
+		"db:migrate:deploy": "prisma migrate deploy",
+		"db:reset": "prisma migrate reset --force",
+		"db:push": "prisma db push",
 		"test": "vitest run",
 		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"@octokit/rest": "^22.0.0",
 		"@prisma/client": "^6.15.0",
+		"@prisma/extension-accelerate": "^1.3.0",
 		"@radix-ui/react-slot": "^1.2.3",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -41,10 +46,11 @@
 		"husky": "^9",
 		"jsdom": "^26.1.0",
 		"lint-staged": "^15",
+		"prisma": "^6.15.0",
 		"tailwindcss": "^4",
+		"tsx": "^4.20.5",
 		"tw-animate-css": "^1.3.8",
 		"typescript": "^5",
-		"vitest": "^3.2.4",
-		"prisma": "^6.15.0"
+		"vitest": "^3.2.4"
 	}
 }

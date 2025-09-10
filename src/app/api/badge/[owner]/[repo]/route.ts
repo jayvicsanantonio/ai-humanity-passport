@@ -55,8 +55,8 @@ export async function GET(
 	const repoLc = repoParam.toLowerCase();
 
 	try {
-		const analysis = await prisma.analysis.findUnique({
-			where: { owner_repo: { owner: ownerLc, repo: repoLc } },
+		const analysis = await prisma.analysis.findFirst({
+			where: { owner: ownerLc, repo: repoLc },
 			select: { verdict: true },
 		});
 
@@ -66,7 +66,7 @@ export async function GET(
 
 		const content = generateBadgeSVG({ owner: ownerLc, repo: repoLc, state });
 		return svgResponse(content, req);
-	} catch (err) {
+	} catch (_err) {
 		// On DB errors, serve a pending badge to avoid leaking server details
 		const content = generateBadgeSVG({
 			owner: ownerLc,

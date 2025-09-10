@@ -24,6 +24,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 - Task 1 — Project Structure and Core Dependencies: [doc/task-1-project-setup.md](doc/task-1-project-setup.md)
 - Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
+- Task 3 — GitHub API Integration Utilities: [doc/task-3-github-api-integration.md](doc/task-3-github-api-integration.md)
 
 ## Database workflow (PostgreSQL via Prisma)
 

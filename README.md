@@ -26,6 +26,21 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
 - Task 3 — GitHub API Integration Utilities: [doc/task-3-github-api-integration.md](doc/task-3-github-api-integration.md)
 - Task 4 — Groq LLM Integration: [doc/task-4-groq-llm-integration.md](doc/task-4-groq-llm-integration.md)
+- Task 5 — Repository Analysis API Endpoint: [doc/task-5-analysis-api.md](doc/task-5-analysis-api.md)
+
+## Environment setup
+
+1) Copy the example file and set your values (never commit real secrets):
+
+```bash
+cp .env.example .env
+```
+
+2) Set the following variables:
+- GROQ_API_KEY (required): API key for Groq LLM used by analysis.
+- GITHUB_TOKEN (optional): GitHub personal access token to increase API rate limits.
+- RATE_LIMIT_MAX (optional, default 5): Max POST /api/analyze requests per IP within the sliding window.
+- RATE_LIMIT_WINDOW_MS (optional, default 60000): Sliding window duration in milliseconds.
 
 ## Database workflow (PostgreSQL via Prisma)
 

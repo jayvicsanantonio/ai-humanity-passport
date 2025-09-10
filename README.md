@@ -26,6 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
 - Task 3 — GitHub API Integration Utilities: [doc/task-3-github-api-integration.md](doc/task-3-github-api-integration.md)
 - Task 4 — Groq LLM Integration: [doc/task-4-groq-llm-integration.md](doc/task-4-groq-llm-integration.md)
+- Task 5 — Repository Analysis API Endpoint: [doc/task-5-analysis-api.md](doc/task-5-analysis-api.md)
 
 ## Database workflow (PostgreSQL via Prisma)
 

@@ -11,11 +11,16 @@ import { parseGitHubUrl, validateGitHubUrl } from "@/lib/validation";
 export const runtime = "nodejs";
 
 // Simple in-memory rate limiter (per-IP, sliding window)
-const RATE_LIMIT_MAX = Number.parseInt(process.env.RATE_LIMIT_MAX ?? "5", 10);
-const RATE_LIMIT_WINDOW_MS = Number.parseInt(
-	process.env.RATE_LIMIT_WINDOW_MS ?? "60000",
-	10,
-);
+const RL_MAX_ENV = process.env.RATE_LIMIT_MAX;
+const parsedMax = RL_MAX_ENV ? Number.parseInt(RL_MAX_ENV, 10) : NaN;
+const RATE_LIMIT_MAX =
+	Number.isNaN(parsedMax) || parsedMax <= 0 ? 5 : parsedMax;
+
+const RL_WIN_ENV = process.env.RATE_LIMIT_WINDOW_MS;
+const parsedWin = RL_WIN_ENV ? Number.parseInt(RL_WIN_ENV, 10) : NaN;
+const RATE_LIMIT_WINDOW_MS =
+	Number.isNaN(parsedWin) || parsedWin <= 0 ? 60000 : parsedWin;
+
 const requests = new Map<string, number[]>();
 
 function getClientIp(req: Request): string {
@@ -108,9 +113,13 @@ export async function POST(request: Request) {
 	}
 
 	const { owner, repo } = ownerRepo;
+	// Normalize to lowercase for unique key stability (GitHub is case-insensitive)
+	const ownerLc = owner.toLowerCase();
+	const repoLc = repo.toLowerCase();
 
 	try {
 		const octokit = createGitHubClient();
+		// Use original casing for GitHub API fetch (API is case-insensitive, but original is fine)
 		const { metadata, readme } = await fetchRepoData(octokit, owner, repo);
 
 		const analysis = await analyzeRepositoryWithGroq(null, {
@@ -119,21 +128,26 @@ export async function POST(request: Request) {
 		});
 
 		await prisma.analysis.upsert({
-			where: { owner_repo: { owner, repo } },
+			where: { owner_repo: { owner: ownerLc, repo: repoLc } },
 			update: {
 				verdict: analysis.verdict,
 				details: analysis.details,
 			},
 			create: {
-				owner,
-				repo,
+				owner: ownerLc,
+				repo: repoLc,
 				verdict: analysis.verdict,
 				details: analysis.details,
 			},
 		});
 
 		return json(
-			{ owner, repo, verdict: analysis.verdict, details: analysis.details },
+			{
+				owner: ownerLc,
+				repo: repoLc,
+				verdict: analysis.verdict,
+				details: analysis.details,
+			},
 			{ status: 200 },
 		);
 	} catch (err: any) {

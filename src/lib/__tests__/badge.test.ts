@@ -11,14 +11,14 @@ describe("generateBadgeSVG", () => {
 
 	it("renders rejected badge with correct text and color", () => {
 		const svg = generateBadgeSVG({ owner: "o", repo: "r", state: "rejected" });
-		expect(svg).toContain("Not Approved");
+		expect(svg).toContain("NOT APPROVED");
 		expect(svg).toContain("#ef4444");
 	});
 
 	it("renders pending badge with correct text and color", () => {
 		const svg = generateBadgeSVG({ owner: "o", repo: "r", state: "pending" });
-		expect(svg).toContain("Analysis Pending");
-		expect(svg).toContain("#6b7280");
+		expect(svg).toContain("ANALYSIS PENDING");
+		expect(svg).toContain("#64748b");
 	});
 
 	it("escapes XML entities in owner/repo and keeps link relative", () => {

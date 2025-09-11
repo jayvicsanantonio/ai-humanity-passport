@@ -15,25 +15,25 @@ function escapeXml(s: string): string {
 }
 
 // Visual constants (LARGE badge)
-const HEIGHT = 128; // larger, card-like presence
-const CAP = 96; // left crest cap width
-const PAD = 20; // inner padding
-const MIN_WIDTH = 80; // minimum overall width for layout balance
+const HEIGHT = 180; // larger, card-like presence for better visibility on regular devices
+const CAP = 120; // left crest cap width
+const PAD = 24; // inner padding
+const MIN_WIDTH = 100; // minimum overall width for layout balance
 const FONT_STACK = "Inter,Segoe UI,DejaVu Sans,Verdana,Geneva,sans-serif";
 
 // Typography sizes
-const BRAND_SIZE = 22; // "Humanity+ Passport"
-const OWNER_SIZE = 16; // owner/repo
-const CHIP_SIZE = 16; // state chip text
+const BRAND_SIZE = 26; // "Humanity+ Passport"
+const OWNER_SIZE = 18; // owner/repo
+const CHIP_SIZE = 18; // state chip text
 
 // Chip metrics
-const CHIP_H = 40;
-const CHIP_RADIUS = 20;
-const CHIP_ICON_W = 18; // width reserved for icon inside chip
-const GAP = 16; // crest ↔ text gap
-const GAP_TO_CHIP = 20; // text block ↔ chip gap
-const LPAD = 32; // left outer padding
-const RPAD = 32; // right outer padding
+const CHIP_H = 48;
+const CHIP_RADIUS = 24;
+const CHIP_ICON_W = 20; // width reserved for icon inside chip
+const GAP = 20; // crest ↔ text gap
+const GAP_TO_CHIP = 24; // text block ↔ chip gap
+const LPAD = 40; // left outer padding
+const RPAD = 40; // right outer padding
 
 // Approximate text width given font size; tuned for these faces
 function textWidth(text: string, size: number): number {
@@ -131,15 +131,15 @@ export function generateBadgeSVG(opts: BadgeOptions): string {
 
 	// Crest cap (left)
 	const cap =
-		`<rect x="${LPAD}" y="14" width="${CAP}" height="${HEIGHT - 28}" rx="16" fill="${capOverlay}" opacity="0.25"/>` +
-		`<circle cx="${LPAD + CAP / 2}" cy="${HEIGHT / 2}" r="32" fill="#0f172a" opacity="0.55"/>` +
-		`<circle cx="${LPAD + CAP / 2}" cy="${HEIGHT / 2}" r="32" fill="none" stroke="${accent}" stroke-opacity="0.5"/>` +
-		`<text x="${LPAD + CAP / 2}" y="${HEIGHT / 2 + 9}" text-anchor="middle" font-family="${FONT_STACK}" font-size="26" fill="#ffffff" font-weight="700">H+</text>`;
+		`<rect x="${LPAD}" y="18" width="${CAP}" height="${HEIGHT - 36}" rx="20" fill="${capOverlay}" opacity="0.25"/>` +
+		`<circle cx="${LPAD + CAP / 2}" cy="${HEIGHT / 2}" r="40" fill="#0f172a" opacity="0.55"/>` +
+		`<circle cx="${LPAD + CAP / 2}" cy="${HEIGHT / 2}" r="40" fill="none" stroke="${accent}" stroke-opacity="0.5"/>` +
+		`<text x="${LPAD + CAP / 2}" y="${HEIGHT / 2 + 11}" text-anchor="middle" font-family="${FONT_STACK}" font-size="32" fill="#ffffff" font-weight="700">H+</text>`;
 
 	// Text block positions
 	const textX = LPAD + CAP + GAP;
-	const brandY = 40; // visually centered upper line
-	const ownerY = 66; // lower line
+	const brandY = 55; // visually centered upper line
+	const ownerY = 85; // lower line
 
 	const texts =
 		`<text x="${textX}" y="${brandY}" font-family="${FONT_STACK}" font-weight="700" font-size="${BRAND_SIZE}" fill="#ffffff">${escapeXml(
@@ -175,5 +175,5 @@ export function generateBadgeSVG(opts: BadgeOptions): string {
 
 // Helper to keep chip horizontal padding together (allows inlining above without string duplication)
 function CHIP_PADW(): number {
-	return 12;
+	return 16;
 }

@@ -30,20 +30,22 @@ export function Badge({
 		<img
 			src={badgeUrl}
 			alt={`Humanity Passport Badge for ${owner}/${repo}`}
-			className={`${sizeClasses[size]} transition-all duration-300 ${
+			className={`${sizeClasses[size]} transition-all duration-300 m-0 p-0 ${
 				interactive ? "hover:brightness-110" : ""
 			}`}
 		/>
 	);
 
 	if (!interactive) {
-		return <div className={`inline-block ${className}`}>{badgeElement}</div>;
+		return (
+			<div className={`inline-block m-0 p-0 ${className}`}>{badgeElement}</div>
+		);
 	}
 
 	return (
 		<a
 			href={passportUrl}
-			className={`inline-block transition-all duration-300 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded ${className}`}
+			className={`inline-block m-0 p-0 transition-all duration-300 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded ${className}`}
 			title={`View Humanity Passport for ${owner}/${repo}`}
 		>
 			{badgeElement}

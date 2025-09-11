@@ -1,3 +1,5 @@
+import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import Groq from "groq-sdk";
 import type { RepoMetadata } from "@/lib/github";
 
@@ -48,11 +50,21 @@ export function truncate(text: string, max = 6000): string {
 	return text.slice(0, max) + "\n...\n[truncated]";
 }
 
+export function buildSummaryMessage(doc: any) {
+	const system =
+		"You are an assistant that summarizes code into plain text. Focus on what the code does and any potential social or ethical impact.";
+	return [
+		{ role: "system" as const, content: system },
+		{ role: "user" as const, content: doc.pageContent },
+	];
+}
+
 export function buildAnalysisMessages(input: {
 	metadata: RepoMetadata;
 	readme?: string | null;
+	summary?: string | null;
 }): Array<{ role: "system" | "user"; content: string }> {
-	const { metadata, readme } = input;
+	const { metadata, readme, summary } = input;
 	const topics = metadata.topics?.length
 		? metadata.topics.join(", ")
 		: "(none)";
@@ -74,7 +86,8 @@ Stars: ${metadata.stars}
 Topics: ${topics}
 URL: ${metadata.htmlUrl}
 
-Top of README (truncated):\n${truncate(readme ?? "", 6000)}`;
+Top of README (truncated):\n${truncate(readme ?? "", 6000)}
+${summary ?? ""}`;
 
 	return [
 		{ role: "system" as const, content: system },
@@ -144,12 +157,105 @@ export function parseGroqAnalysisText(text: string): AnalysisResult {
 	};
 }
 
+export async function processGithubRepository(
+	repoUrl: string,
+): Promise<string> {
+	// 1. Load repo files
+	const loader = new GithubRepoLoader(repoUrl, {
+		branch: "main",
+		recursive: true,
+	});
+	const docs = await loader.load();
+
+	// 2. Split into chunks
+	const splitter = new RecursiveCharacterTextSplitter({
+		chunkSize: 2000,
+		chunkOverlap: 200,
+	});
+	const splitDocs = await splitter.splitDocuments(docs);
+
+	// 3. Map step: summarize each chunk
+	const summaries: string[] = [];
+	for (const doc of splitDocs) {
+		const summary = await summarizeRepositoryWithGroq(null, { doc });
+		summaries.push(summary);
+	}
+	// 4. Reduce step: combine into a single summary
+	return summaries.join("\n\n");
+}
+
+export async function summarizeRepositoryWithGroq(
+	client:
+		| ReturnType<typeof createGroqClient>
+		| { chat: { completions: { create: Function } } }
+		| null,
+	input: { doc: any },
+	options?: {
+		model?: string;
+		temperature?: number;
+		maxTokens?: number;
+		attempts?: number;
+		baseDelayMs?: number;
+	},
+): Promise<string> {
+	const groq = client ?? createGroqClient();
+
+	const model = options?.model ?? "openai/gpt-oss-20b";
+	const temperature = options?.temperature ?? 0.2;
+	const max_tokens = options?.maxTokens ?? 1024;
+	const attempts = Math.max(1, options?.attempts ?? 3);
+	const baseDelayMs = options?.baseDelayMs ?? 400;
+
+	const messages = buildSummaryMessage(input.doc);
+
+	let lastErr: unknown;
+	for (let i = 0; i < attempts; i++) {
+		try {
+			const resp: any = await (groq as any).chat.completions.create({
+				model,
+				messages,
+				temperature,
+				max_tokens,
+			});
+			const content: string | undefined = resp?.choices?.[0]?.message?.content;
+			if (!content) {
+				throw new GroqApiError("Groq response missing content", {
+					code: "GROQ_EMPTY_CONTENT",
+					retryable: true,
+				});
+			}
+			return content.trim();
+		} catch (err: any) {
+			lastErr = err;
+			const status = err?.status ?? err?.statusCode ?? err?.response?.status;
+			const retryable = !!(
+				status && [408, 429, 500, 502, 503, 504].includes(status)
+			);
+			const shouldRetry = retryable && i < attempts - 1;
+			if (!shouldRetry) {
+				// Re-throw as GroqApiError for consistent handling
+				if (err instanceof GroqApiError) throw err;
+				throw new GroqApiError(err?.message ?? "Groq API error", {
+					status,
+					code: err?.code,
+					retryable,
+				});
+			}
+			const delay = baseDelayMs * 2 ** i; // simple backoff
+			await new Promise((res) => setTimeout(res, delay));
+		}
+	}
+
+	// Should not reach here due to early returns/throws
+	throw lastErr;
+}
+
 export async function analyzeRepositoryWithGroq(
 	client:
 		| ReturnType<typeof createGroqClient>
 		| { chat: { completions: { create: Function } } }
 		| null,
-	input: { metadata: RepoMetadata; readme?: string | null },
+	input: { metadata: RepoMetadata; readme?: string | null; summary?: any },
 	options?: {
 		model?: string;
 		temperature?: number;

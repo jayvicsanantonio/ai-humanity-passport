@@ -5,7 +5,11 @@ import {
 	fetchRepoData,
 	GitHubApiError,
 } from "@/lib/github";
-import { analyzeRepositoryWithGroq, GroqApiError } from "@/lib/llm";
+import {
+	analyzeRepositoryWithGroq,
+	GroqApiError,
+	processGithubRepository,
+} from "@/lib/llm";
 import { parseGitHubUrl, validateGitHubUrl } from "@/lib/validation";
 
 export const runtime = "nodejs";
@@ -122,9 +126,20 @@ export async function POST(request: Request) {
 		// Use original casing for GitHub API fetch (API is case-insensitive, but original is fine)
 		const { metadata, readme } = await fetchRepoData(octokit, owner, repo);
 
+		let summary: string | null = null;
+		const skipSummary =
+			(
+				process.env.SAVE_GROK_TOKENS_AND_AVOID_GITHUBAPI_RATE_LIMIT ?? ""
+			).toLowerCase() === "true";
+
+		if (!skipSummary) {
+			summary = await processGithubRepository(repoUrl);
+		}
+
 		const analysis = await analyzeRepositoryWithGroq(null, {
 			metadata,
 			readme,
+			summary,
 		});
 
 		await prisma.analysis.upsert({

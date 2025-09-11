@@ -1,3 +1,4 @@
+import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/passport/badge";
 import { CopyButton } from "@/components/passport/copy-button";
 import { Button } from "@/components/ui/button";
@@ -131,7 +132,15 @@ export default async function PassportPage({ params }: PassportPageProps) {
 						Humanity Passport
 					</h1>
 					<p className="text-xl text-gray-600 dark:text-gray-300">
-						{decodedOwner}/{decodedRepo}
+						<a
+							href={`https://github.com/${decodedOwner}/${decodedRepo}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors underline inline-flex items-center gap-1"
+						>
+							{decodedOwner}/{decodedRepo}
+							<ExternalLink className="w-4 h-4" />
+						</a>
 					</p>
 				</div>
 

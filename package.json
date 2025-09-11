@@ -18,6 +18,8 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
+		"@langchain/community": "^0.2.33",
+		"@langchain/textsplitters": "^0.1.0",
 		"@octokit/rest": "^22.0.0",
 		"@prisma/client": "^6.15.0",
 		"@prisma/extension-accelerate": "^1.3.0",

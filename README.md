@@ -1,37 +1,40 @@
 [![Humanity Passport](https://ai-humanity-passport.vercel.app/api/badge/shsanantonio/ai-humanity-passport)](https://ai-humanity-passport.vercel.app/passport/shsanantonio/ai-humanity-passport)
 
 
+---
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Humanity Passport
 
-First, run the development server:
+> Our official submission for the
+>
+> **OpenAI Open Model Hackathon** in the **"For Humanity"** category.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Humanity Passport is a web application that uses AI to analyze open-source projects and award a badge of honor to those that positively impact humanity. Our goal is to make socially responsible software development visible, rewarding, and discoverable.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Live application**: [https://ai-humanity-passport.vercel.app](https://ai-humanity-passport.vercel.app)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Project Documentation
+## Features
+- **AI-Powered Analysis**: We use the gpt-oss-20b model via the high-speed Groq API to evaluate a repository's purpose, impact, and documentation.
+- **Dynamic SVG Badges**: Instantly generated SVG badges that reflect the analysis verdict ("Humanity+ Passport" or "Not Approved").
+- **Public Passport Pages**: Every analyzed repository gets a permanent, shareable page detailing the AI's findings and reasoning.
+- **Seamless Integration**: A simple Markdown snippet allows developers to embed their badge directly into their README.md file.
+- **Modern Tech Stack**: Built with Next.js 14, React, TailwindCSS, and Prisma for a fast, reliable, and scalable experience.
 
-- Task 1 — Project Structure and Core Dependencies: [doc/task-1-project-setup.md](doc/task-1-project-setup.md)
-- Task 2 — Database and Data Models: [doc/task-2-database-and-models.md](doc/task-2-database-and-models.md)
-- Task 3 — GitHub API Integration Utilities: [doc/task-3-github-api-integration.md](doc/task-3-github-api-integration.md)
-- Task 4 — Groq LLM Integration: [doc/task-4-groq-llm-integration.md](doc/task-4-groq-llm-integration.md)
-- Task 5 — Repository Analysis API Endpoint: [doc/task-5-analysis-api.md](doc/task-5-analysis-api.md)
-- Task 6 — Dynamic Badge Generation: [doc/task-6-badge-generation.md](doc/task-6-badge-generation.md)
+---
 
-## Environment setup
+## How It Works
+1. Submit a Repo: A developer submits a public GitHub repository URL on our homepage.
+2. Analyze: The backend fetches repository metadata using the GitHub API and sends it to the Groq LLM for analysis.
+3. Get a Badge: The system stores the result and generates a unique passport page and a dynamic SVG badge that can be embedded anywhere.
+
+---
+
+## Getting Started & Local Development
+
+### Environment Setup
 
 1) Copy the example file and set your values (never commit real secrets):
 
@@ -44,6 +47,33 @@ cp .env.example .env
 - GITHUB_TOKEN (optional): GitHub personal access token to increase API rate limits.
 - RATE_LIMIT_MAX (optional, default 5): Max POST /api/analyze requests per IP within the sliding window.
 - RATE_LIMIT_WINDOW_MS (optional, default 60000): Sliding window duration in milliseconds.
+
+---
+
+### Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/your-username/ai-humanity-passport.git
+    cd ai-humanity-passport
+    ```
+2. Install dependencies:
+
+    ```bash
+    npm install
+    ```
+3. Run the database migration:
+    ```bash
+    # This will set up your local SQLite database.
+    npx prisma migrate dev
+    ```
+4. Run the development server:
+    ```bash
+    npm run dev
+    ```
+5. Open http://localhost:3000 with your browser to see the result.
+---
 
 ## Database workflow (PostgreSQL via Prisma)
 
@@ -61,17 +91,7 @@ Pooling on Vercel:
 
 See details: [db:migrate vs db:push](doc/task-2-database-and-models.md#dbmigrate-vs-dbpush)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+This project is licensed under the Apache License.

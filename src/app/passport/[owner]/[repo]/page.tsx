@@ -1,16 +1,21 @@
 import {
-	Award,
+	Calendar,
 	CheckCircle,
+	Clock,
 	ExternalLink,
 	Github,
-	Shield,
-	Sparkles,
 	XCircle,
 } from "lucide-react";
 import { Badge } from "@/components/passport/badge";
 import { CopyButton } from "@/components/passport/copy-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { prisma } from "@/lib/db";
 
 interface PassportPageProps {
@@ -48,46 +53,6 @@ async function getAnalysis(
 	}
 }
 
-function getProTipMessage(verdict: string, details: string): string {
-	const lowerDetails = details.toLowerCase();
-
-	// Check if it's a personal/learning project first (higher priority)
-	const isPersonalOrLearning =
-		lowerDetails.includes("personal") ||
-		lowerDetails.includes("portfolio") ||
-		lowerDetails.includes("learning") ||
-		lowerDetails.includes("experimental") ||
-		lowerDetails.includes("tutorial") ||
-		lowerDetails.includes("practice") ||
-		lowerDetails.includes("knowledge sharing") ||
-		lowerDetails.includes("educational resource");
-
-	// Check if the project has positive social impact based on verdict and details
-	const hasPositiveSocialImpact =
-		verdict === "approved" &&
-		(lowerDetails.includes("accessibility") ||
-			lowerDetails.includes("sustainability") ||
-			(lowerDetails.includes("education") && !isPersonalOrLearning) ||
-			lowerDetails.includes("health") ||
-			(lowerDetails.includes("open knowledge") &&
-				!lowerDetails.includes("knowledge sharing")) ||
-			lowerDetails.includes("social") ||
-			lowerDetails.includes("community") ||
-			lowerDetails.includes("humanitarian") ||
-			lowerDetails.includes("environment") ||
-			lowerDetails.includes("public good") ||
-			lowerDetails.includes("societal benefit"));
-
-	if (isPersonalOrLearning || verdict !== "approved") {
-		return "Add a badge to highlight that this project is for learning, personal growth, or knowledge sharing—helping others discover and learn from your work.";
-	} else if (hasPositiveSocialImpact) {
-		return "Add this badge to the top of your README.md file to let visitors know about your repository's positive impact on humanity.";
-	} else {
-		// Default message for approved projects that don't clearly fall into other categories
-		return "Add this badge to the top of your README.md file to let visitors know about your repository's positive impact on humanity.";
-	}
-}
-
 export default async function PassportPage({ params }: PassportPageProps) {
 	const { owner, repo } = await params;
 
@@ -99,60 +64,69 @@ export default async function PassportPage({ params }: PassportPageProps) {
 
 	if (!analysis) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30 relative overflow-hidden">
-				{/* Luxury background elements */}
-				<div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]" />
-				<div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.03),transparent_50%)]" />
-
-				<div className="container mx-auto px-8 py-12 h-full flex items-center justify-center relative">
-					<div className="max-w-2xl mx-auto">
-						<div className="relative">
-							<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-2xl blur-xl" />
-							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl text-center">
-								<CardHeader className="space-y-6 pb-8">
-									<div className="flex justify-center">
-										<div className="relative group">
-											<div className="absolute -inset-3 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500" />
-											<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-4 border border-white/20 dark:border-slate-700/50 shadow-xl">
-												<Shield className="h-12 w-12 text-slate-600 dark:text-slate-300" />
-												<div className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full p-1.5 shadow-lg">
-													<XCircle className="h-4 w-4 text-white" />
-												</div>
-											</div>
-										</div>
-									</div>
-									<CardTitle className="text-2xl lg:text-3xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-										Repository Not Analyzed
-									</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-8">
-									<div className="space-y-4">
-										<p className="text-lg text-slate-600 dark:text-slate-300 font-light">
-											The repository{" "}
-											<span className="font-medium bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-												{decodedOwner}/{decodedRepo}
-											</span>{" "}
-											has not been analyzed yet.
-										</p>
-										<p className="text-slate-500 dark:text-slate-400 font-light">
-											Submit this repository for analysis on our home page to
-											receive a Humanity Passport.
-										</p>
-									</div>
-									<Button
-										asChild
-										className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 hover:from-blue-500 hover:via-purple-500 hover:to-emerald-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] text-base font-medium px-8 py-3"
-									>
-										<a href="/" className="inline-flex items-center gap-2">
-											<Shield className="h-5 w-5" />
-											Analyze Repository
-											<Sparkles className="h-4 w-4" />
-										</a>
-									</Button>
-								</CardContent>
-							</Card>
+			<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 sm:py-12 px-4">
+				<div className="max-w-4xl mx-auto">
+					{/* Header */}
+					<div className="text-center mb-8">
+						<div className="flex items-center justify-center gap-3 mb-4">
+							<Github className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+							<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+								Humanity Passport
+							</h1>
 						</div>
+						<p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-mono">
+							{decodedOwner}/{decodedRepo}
+						</p>
 					</div>
+
+					<Card className="text-center">
+						<CardHeader>
+							<div className="flex items-center justify-center gap-2 mb-2">
+								<Clock className="w-6 h-6 text-amber-500" />
+								<CardTitle className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+									Repository Not Analyzed
+								</CardTitle>
+							</div>
+							<CardDescription className="text-base">
+								This repository hasn't been evaluated yet
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-6">
+							<div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+								<p className="text-gray-700 dark:text-gray-300 mb-2">
+									The repository{" "}
+									<span className="font-mono font-semibold text-gray-900 dark:text-white">
+										{decodedOwner}/{decodedRepo}
+									</span>{" "}
+									has not been analyzed yet.
+								</p>
+								<p className="text-sm text-gray-600 dark:text-gray-400">
+									Submit this repository for analysis to receive a Humanity
+									Passport and discover its positive impact.
+								</p>
+							</div>
+
+							<div className="flex flex-col sm:flex-row gap-3 justify-center">
+								<Button asChild size="lg">
+									<a href="/" className="flex items-center gap-2">
+										<CheckCircle className="w-4 h-4" />
+										Analyze Repository
+									</a>
+								</Button>
+								<Button variant="outline" size="lg" asChild>
+									<a
+										href={`https://github.com/${decodedOwner}/${decodedRepo}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="flex items-center gap-2"
+									>
+										<ExternalLink className="w-4 h-4" />
+										View on GitHub
+									</a>
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
 				</div>
 			</div>
 		);
@@ -160,188 +134,154 @@ export default async function PassportPage({ params }: PassportPageProps) {
 
 	const badgeMarkdown = `[![Humanity Passport](${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/badge/${decodedOwner}/${decodedRepo})](${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/passport/${decodedOwner}/${decodedRepo})`;
 
+	const isApproved = analysis.verdict === "approved";
+	const VerdictIcon = isApproved ? CheckCircle : XCircle;
+	const verdictColor = isApproved
+		? "text-green-600 dark:text-green-400"
+		: "text-red-600 dark:text-red-400";
+	const verdictBg = isApproved
+		? "bg-green-50 dark:bg-green-900/20"
+		: "bg-red-50 dark:bg-red-900/20";
+	const verdictBorder = isApproved
+		? "border-green-200 dark:border-green-800"
+		: "border-red-200 dark:border-red-800";
+
 	return (
-		<div className="h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30 relative overflow-hidden">
-			{/* Luxury background elements */}
-			<div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]" />
-			<div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.03),transparent_50%)]" />
-
-			<div className="container mx-auto px-8 py-8 h-full flex flex-col justify-center relative">
-				<div className="max-w-7xl mx-auto">
-					{/* Header */}
-					<div className="text-center mb-8">
-						<div className="flex items-center justify-center gap-4 mb-6">
-							<div className="relative group">
-								<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-								<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-3 border border-white/20 dark:border-slate-700/50 shadow-xl">
-									<Shield className="h-8 w-8 text-slate-600 dark:text-slate-300" />
-									<div className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full p-1 shadow-lg">
-										{analysis.verdict === "approved" ? (
-											<CheckCircle className="h-3 w-3 text-white" />
-										) : (
-											<XCircle className="h-3 w-3 text-white" />
-										)}
-									</div>
-									<Sparkles className="h-2.5 w-2.5 text-amber-500 absolute -top-0.5 -left-0.5 animate-pulse" />
-								</div>
-							</div>
-							<div className="h-0.5 w-16 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-full" />
-						</div>
-
-						<h1 className="text-3xl lg:text-4xl xl:text-5xl font-elegant font-medium bg-gradient-to-r from-slate-600 via-blue-500 to-emerald-500 dark:from-slate-200 dark:via-blue-300 dark:to-emerald-300 bg-clip-text text-transparent leading-tight mb-4">
-							Humanity
-							<span className="text-2xl lg:text-3xl xl:text-4xl mx-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-								+
-							</span>
-							<span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
-								Passport
-							</span>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 sm:py-12 px-4">
+			<div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+				{/* Header */}
+				<div className="text-center">
+					<div className="flex items-center justify-center gap-3 mb-4">
+						<Github className="w-8 h-8 text-gray-600 dark:text-gray-400" />
+						<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+							Humanity Passport
 						</h1>
-
-						<div className="flex items-center justify-center gap-2">
-							<Github className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+					</div>
+					<div className="flex items-center justify-center gap-2 mb-4">
+						<p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-mono">
+							{decodedOwner}/{decodedRepo}
+						</p>
+						<Button variant="ghost" size="sm" asChild>
 							<a
 								href={`https://github.com/${decodedOwner}/${decodedRepo}`}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-lg font-light text-slate-600 dark:text-slate-300 hover:bg-gradient-to-r hover:from-blue-400 hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-300 inline-flex items-center gap-2"
+								className="flex items-center gap-1"
 							>
-								{decodedOwner}/{decodedRepo}
 								<ExternalLink className="w-4 h-4" />
 							</a>
-						</div>
-					</div>
-
-					{/* Main Content Grid */}
-					<div className="grid lg:grid-cols-2 gap-8 items-start">
-						{/* Left Column */}
-						<div className="space-y-6">
-							{/* Badge Display */}
-							<div className="flex justify-center lg:justify-start">
-								<div className="relative">
-									<div className="absolute -inset-3 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-2xl blur-xl" />
-									<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-2xl">
-										<Badge owner={decodedOwner} repo={decodedRepo} />
-									</div>
-								</div>
-							</div>
-
-							{/* Analysis Results */}
-							<div className="relative">
-								<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-2xl blur-xl" />
-								<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl">
-									<CardHeader className="pb-4">
-										<CardTitle className="flex items-center gap-3 text-lg">
-											<div
-												className={`flex items-center justify-center w-8 h-8 rounded-full ${
-													analysis.verdict === "approved"
-														? "bg-gradient-to-r from-emerald-500 to-green-600"
-														: "bg-gradient-to-r from-red-500 to-pink-600"
-												} shadow-lg`}
-											>
-												{analysis.verdict === "approved" ? (
-													<CheckCircle className="h-4 w-4 text-white" />
-												) : (
-													<XCircle className="h-4 w-4 text-white" />
-												)}
-											</div>
-											<span className="font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-												{analysis.verdict === "approved"
-													? "Approved"
-													: "Not Approved"}
-											</span>
-										</CardTitle>
-									</CardHeader>
-									<CardContent className="space-y-4">
-										<div className="relative">
-											<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-xl blur-sm" />
-											<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-xl p-4 border border-blue-200/30 dark:border-blue-800/30">
-												<div className="prose dark:prose-invert max-w-none">
-													<p className="text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed font-light text-sm">
-														{analysis.details}
-													</p>
-												</div>
-											</div>
-										</div>
-										<div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-											<Award className="h-3 w-3" />
-											<span>
-												Analyzed on{" "}
-												{new Date(analysis.createdAt).toLocaleDateString()}
-											</span>
-										</div>
-									</CardContent>
-								</Card>
-							</div>
-						</div>
-
-						{/* Right Column */}
-						<div className="relative">
-							<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-2xl blur-xl" />
-							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl">
-								<CardHeader className="pb-4">
-									<CardTitle className="flex items-center gap-3 text-lg">
-										<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-2 shadow-lg">
-											<Github className="h-4 w-4 text-white" />
-										</div>
-										<span className="font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-											Embed Badge
-										</span>
-									</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									<p className="text-slate-600 dark:text-slate-300 font-light text-sm">
-										Copy this Markdown code to display the badge in your README:
-									</p>
-
-									<div className="relative">
-										<div className="absolute -inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-xl blur-sm" />
-										<div className="relative bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl p-4 font-mono text-xs border border-slate-200/50 dark:border-slate-700/50">
-											<code className="text-slate-800 dark:text-slate-200 break-all leading-relaxed">
-												{badgeMarkdown}
-											</code>
-											<CopyButton text={badgeMarkdown} />
-										</div>
-									</div>
-
-									{/* Contextual Pro Tip */}
-									<div className="relative">
-										<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-xl blur-sm" />
-										<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-xl p-4 border border-blue-200/30 dark:border-blue-800/30">
-											<div className="flex items-start gap-3">
-												<div className="flex-shrink-0 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1.5 shadow-lg">
-													<Sparkles className="h-3 w-3 text-white" />
-												</div>
-												<div className="space-y-1">
-													<h3 className="font-semibold text-slate-600 dark:text-slate-200 text-sm">
-														Pro tip:
-													</h3>
-													<p className="text-slate-600 dark:text-slate-300 font-light leading-relaxed text-xs">
-														{getProTipMessage(
-															analysis.verdict,
-															analysis.details,
-														)}
-													</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						</div>
+						</Button>
 					</div>
 				</div>
 
-				{/* Footer */}
-				<footer className="mt-8 text-center">
-					<div className="flex justify-center mb-4">
-						<div className="h-px w-24 bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
+				{/* Badge Display */}
+				<div className="flex justify-center">
+					<div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+						<Badge
+							owner={decodedOwner}
+							repo={decodedRepo}
+							size="xxl"
+							interactive={false}
+						/>
 					</div>
-					<p className="text-xs text-slate-500 dark:text-slate-400 font-light">
-						Crafted with <span className="text-red-500 animate-pulse">❤️</span>{" "}
-						to inspire socially responsible software development
-					</p>
-				</footer>
+				</div>
+
+				{/* Verdict Summary */}
+				<Card className={`${verdictBg} ${verdictBorder}`}>
+					<CardHeader>
+						<div className="flex items-center justify-center gap-3">
+							<VerdictIcon className={`w-8 h-8 ${verdictColor}`} />
+							<div className="text-center">
+								<CardTitle className={`text-xl sm:text-2xl ${verdictColor}`}>
+									{isApproved
+										? "Humanity Passport Approved"
+										: "Not Approved for Humanity Passport"}
+								</CardTitle>
+								<CardDescription className="mt-1">
+									{isApproved
+										? "This repository contributes positively to humanity"
+										: "This repository does not meet the criteria for positive impact"}
+								</CardDescription>
+							</div>
+						</div>
+					</CardHeader>
+				</Card>
+
+				{/* Analysis Details */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<span className="text-lg">📋</span>
+							Detailed Analysis
+						</CardTitle>
+						<CardDescription>
+							AI-powered evaluation of this repository's impact on humanity
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="prose dark:prose-invert max-w-none">
+							<div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+								<p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+									{analysis.details}
+								</p>
+							</div>
+						</div>
+						<div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
+							<Calendar className="w-4 h-4" />
+							<span>
+								Analyzed on{" "}
+								{new Date(analysis.createdAt).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})}
+							</span>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* Badge Embed Code */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<span className="text-lg">🏷️</span>
+							Embed Your Badge
+						</CardTitle>
+						<CardDescription>
+							Add this badge to your repository's README to showcase your
+							Humanity Passport
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="space-y-3">
+							<p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+								Markdown code:
+							</p>
+							<div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 font-mono text-sm relative border border-gray-200 dark:border-gray-700">
+								<code className="text-gray-800 dark:text-gray-200 break-all block pr-20">
+									{badgeMarkdown}
+								</code>
+								<CopyButton text={badgeMarkdown} />
+							</div>
+						</div>
+
+						<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+							<div className="flex items-start gap-3">
+								<div className="text-blue-600 dark:text-blue-400 mt-0.5">
+									💡
+								</div>
+								<div className="text-sm text-blue-800 dark:text-blue-200">
+									<p className="font-medium mb-1">Pro tip:</p>
+									<p>
+										Add this badge to the top of your README.md file to let
+										visitors know about your repository's positive impact on
+										humanity.
+									</p>
+								</div>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 		</div>
 	);

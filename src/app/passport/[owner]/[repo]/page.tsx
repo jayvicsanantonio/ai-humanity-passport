@@ -417,7 +417,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 										<div className="relative">
 											<div className="absolute -inset-1 bg-gradient-to-r from-slate-600/10 to-emerald-600/10 rounded-lg blur-sm" />
 											<div className="relative bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-lg p-3 font-mono text-xs border border-slate-200/50 dark:border-slate-700/50">
-												<code className="text-slate-800 dark:text-slate-200 break-all block pr-16">
+												<code className="text-slate-800 dark:text-slate-200 break-all block pr-20">
 													{badgeMarkdown}
 												</code>
 												<CopyButton text={badgeMarkdown} />

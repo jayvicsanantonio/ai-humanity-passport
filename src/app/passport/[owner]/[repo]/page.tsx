@@ -39,6 +39,46 @@ async function getAnalysis(
 	}
 }
 
+function getProTipMessage(verdict: string, details: string): string {
+	const lowerDetails = details.toLowerCase();
+
+	// Check if it's a personal/learning project first (higher priority)
+	const isPersonalOrLearning =
+		lowerDetails.includes("personal") ||
+		lowerDetails.includes("portfolio") ||
+		lowerDetails.includes("learning") ||
+		lowerDetails.includes("experimental") ||
+		lowerDetails.includes("tutorial") ||
+		lowerDetails.includes("practice") ||
+		lowerDetails.includes("knowledge sharing") ||
+		lowerDetails.includes("educational resource");
+
+	// Check if the project has positive social impact based on verdict and details
+	const hasPositiveSocialImpact =
+		verdict === "approved" &&
+		(lowerDetails.includes("accessibility") ||
+			lowerDetails.includes("sustainability") ||
+			(lowerDetails.includes("education") && !isPersonalOrLearning) ||
+			lowerDetails.includes("health") ||
+			(lowerDetails.includes("open knowledge") &&
+				!lowerDetails.includes("knowledge sharing")) ||
+			lowerDetails.includes("social") ||
+			lowerDetails.includes("community") ||
+			lowerDetails.includes("humanitarian") ||
+			lowerDetails.includes("environment") ||
+			lowerDetails.includes("public good") ||
+			lowerDetails.includes("societal benefit"));
+
+	if (isPersonalOrLearning || verdict !== "approved") {
+		return "Add a badge to highlight that this project is for learning, personal growth, or knowledge sharing—helping others discover and learn from your work.";
+	} else if (hasPositiveSocialImpact) {
+		return "Add this badge to the top of your README.md file to let visitors know about your repository's positive impact on humanity.";
+	} else {
+		// Default message for approved projects that don't clearly fall into other categories
+		return "Add this badge to the top of your README.md file to let visitors know about your repository's positive impact on humanity.";
+	}
+}
+
 export default async function PassportPage({ params }: PassportPageProps) {
 	const { owner, repo } = await params;
 
@@ -141,6 +181,23 @@ export default async function PassportPage({ params }: PassportPageProps) {
 								{badgeMarkdown}
 							</code>
 							<CopyButton text={badgeMarkdown} />
+						</div>
+
+						{/* Contextual Pro Tip */}
+						<div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+							<div className="flex items-start gap-2">
+								<div className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mt-0.5">
+									<span className="text-white text-xs font-bold">💡</span>
+								</div>
+								<div className="text-sm">
+									<p className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+										Pro tip:
+									</p>
+									<p className="text-blue-800 dark:text-blue-200">
+										{getProTipMessage(analysis.verdict, analysis.details)}
+									</p>
+								</div>
+							</div>
 						</div>
 					</CardContent>
 				</Card>

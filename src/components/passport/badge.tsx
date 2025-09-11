@@ -4,7 +4,7 @@ interface BadgeProps {
 	owner: string;
 	repo: string;
 	className?: string;
-	size?: "sm" | "md" | "lg";
+	size?: "sm" | "md" | "lg" | "xl" | "xxl";
 	interactive?: boolean;
 }
 
@@ -18,10 +18,12 @@ export function Badge({
 	const badgeUrl = `/api/badge/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
 	const passportUrl = `/passport/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
 
-	const sizeClasses = {
+	const sizeClasses: Record<NonNullable<BadgeProps["size"]>, string> = {
 		sm: "h-5",
 		md: "h-6 sm:h-7",
 		lg: "h-8 sm:h-10",
+		xl: "h-16 sm:h-20", // 64px → 80px
+		xxl: "h-20 sm:h-24", // 80px → 96px
 	};
 
 	const badgeElement = (

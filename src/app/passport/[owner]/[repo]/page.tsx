@@ -180,7 +180,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 						<Badge
 							owner={decodedOwner}
 							repo={decodedRepo}
-							size="lg"
+							size="xxl"
 							interactive={false}
 						/>
 					</div>

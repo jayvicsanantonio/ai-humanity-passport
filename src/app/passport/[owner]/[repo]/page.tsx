@@ -425,25 +425,29 @@ export default async function PassportPage({ params }: PassportPageProps) {
 										</div>
 									</div>
 
-									<div className="relative flex-1 flex items-start">
-										<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-lg blur-sm" />
-										<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-lg p-4 border border-blue-200/30 dark:border-blue-800/30 w-full">
-											<div className="flex items-start gap-3">
-												<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1.5 flex-shrink-0">
-													<Sparkles className="h-3 w-3 text-white" />
-												</div>
-												<div className="text-xs text-blue-800 dark:text-blue-200">
-													<p className="font-semibold mb-1 text-sm">Pro tip:</p>
-													<p className="leading-relaxed">
-														{getProTipMessage(
-															analysis.verdict,
-															analysis.details,
-														)}
-													</p>
+									{isApproved && (
+										<div className="relative flex-1 flex items-start">
+											<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-lg blur-sm" />
+											<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-lg p-4 border border-blue-200/30 dark:border-blue-800/30 w-full">
+												<div className="flex items-start gap-3">
+													<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1.5 flex-shrink-0">
+														<Sparkles className="h-3 w-3 text-white" />
+													</div>
+													<div className="text-xs text-blue-800 dark:text-blue-200">
+														<p className="font-semibold mb-1 text-sm">
+															Pro tip:
+														</p>
+														<p className="leading-relaxed">
+															{getProTipMessage(
+																analysis.verdict,
+																analysis.details,
+															)}
+														</p>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									)}
 								</CardContent>
 							</Card>
 						</div>

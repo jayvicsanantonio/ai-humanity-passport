@@ -30,17 +30,17 @@ export function CopyButton({ text, className = "" }: CopyButtonProps) {
 			onClick={handleCopy}
 			variant="outline"
 			size="sm"
-			className={`absolute top-2 right-2 transition-all duration-200 ${className}`}
+			className={`absolute top-1.5 sm:top-2 right-1.5 sm:right-2 transition-all duration-200 text-xs h-7 sm:h-8 ${className}`}
 		>
 			{copied ? (
 				<>
-					<Check className="w-4 h-4" />
-					Copied!
+					<Check className="w-3 h-3 sm:w-4 sm:h-4" />
+					<span className="ml-1 hidden sm:inline">Copied!</span>
 				</>
 			) : (
 				<>
-					<Copy className="w-4 h-4" />
-					Copy
+					<Copy className="w-3 h-3 sm:w-4 sm:h-4" />
+					<span className="ml-1 hidden sm:inline">Copy</span>
 				</>
 			)}
 		</Button>

@@ -173,6 +173,32 @@
 		background-size: 400% 400%;
 		animation: gradientShift 15s ease infinite;
 	}
+
+	/* Mobile-specific improvements */
+	@media (max-width: 640px) {
+		.container {
+			padding-left: 1rem;
+			padding-right: 1rem;
+		}
+
+		/* Improve touch targets on mobile */
+		button,
+		a {
+			min-height: 44px;
+		}
+
+		/* Better text readability on small screens */
+		.text-xs {
+			font-size: 0.75rem;
+			line-height: 1.2;
+		}
+	}
+
+	/* Prevent horizontal scroll on mobile */
+	.break-anywhere {
+		word-break: break-word;
+		overflow-wrap: anywhere;
+	}
 }
 
 @keyframes float {

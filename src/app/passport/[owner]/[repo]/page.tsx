@@ -132,36 +132,36 @@ export default async function PassportPage({ params }: PassportPageProps) {
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]" />
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.03),transparent_50%)]" />
 
-				<div className="container mx-auto px-6 py-6 h-full flex flex-col relative">
+				<div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 min-h-screen flex flex-col relative">
 					<div className="max-w-6xl mx-auto flex-1 flex flex-col justify-center">
 						{/* Header */}
-						<div className="text-center mb-8">
-							<div className="flex items-center justify-center gap-4 mb-6">
+						<div className="text-center mb-6 sm:mb-8">
+							<div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
 								<div className="relative group">
-									<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-									<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-3 border border-white/20 dark:border-slate-700/50 shadow-xl">
-										<Shield className="h-8 w-8 text-slate-600 dark:text-slate-300" />
-										<div className="absolute -top-1 -right-1 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full p-1 shadow-lg">
-											<Github className="h-3 w-3 text-white" />
+									<div className="absolute -inset-1.5 sm:-inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-md sm:blur-lg group-hover:blur-lg sm:group-hover:blur-xl transition-all duration-500" />
+									<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-2.5 sm:p-3 border border-white/20 dark:border-slate-700/50 shadow-xl">
+										<Shield className="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 dark:text-slate-300" />
+										<div className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full p-0.5 sm:p-1 shadow-lg">
+											<Github className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
 										</div>
-										<Sparkles className="h-2.5 w-2.5 text-amber-500 absolute -top-0.5 -left-0.5 animate-pulse" />
+										<Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-amber-500 absolute -top-0.5 -left-0.5 animate-pulse" />
 									</div>
 								</div>
-								<div className="h-0.5 w-16 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-full" />
+								<div className="h-0.5 w-12 sm:w-16 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-full" />
 							</div>
 
-							<h1 className="text-3xl lg:text-4xl xl:text-5xl font-elegant font-medium leading-tight mb-4">
+							<h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-elegant font-medium leading-tight mb-3 sm:mb-4">
 								<span className="bg-gradient-to-r from-slate-600 via-blue-500 to-emerald-500 dark:from-slate-200 dark:via-blue-300 dark:to-emerald-300 bg-clip-text text-transparent">
 									Humanity
 								</span>
-								<span className="text-2xl lg:text-3xl xl:text-4xl mx-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+								<span className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl mx-2 sm:mx-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
 									+
 								</span>
 								<span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
 									Passport
 								</span>
 							</h1>
-							<p className="text-sm text-slate-500 dark:text-slate-400 font-mono bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20 dark:border-slate-700/50 shadow-lg inline-block">
+							<p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 border border-white/20 dark:border-slate-700/50 shadow-lg inline-block break-all">
 								{decodedOwner}/{decodedRepo}
 							</p>
 						</div>
@@ -200,31 +200,34 @@ export default async function PassportPage({ params }: PassportPageProps) {
 										</div>
 									</div>
 
-									<div className="flex flex-col sm:flex-row gap-3 justify-center">
+									<div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
 										<Button
 											asChild
 											size="lg"
-											className="h-10 text-sm font-medium bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 hover:from-blue-500 hover:via-purple-500 hover:to-emerald-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+											className="h-9 sm:h-10 text-xs sm:text-sm font-medium bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 hover:from-blue-500 hover:via-purple-500 hover:to-emerald-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
 										>
-											<a href="/" className="flex items-center gap-2">
-												<Shield className="w-4 h-4" />
+											<a
+												href="/"
+												className="flex items-center gap-1.5 sm:gap-2"
+											>
+												<Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
 												Analyze Repository
-												<Sparkles className="w-3 h-3" />
+												<Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
 											</a>
 										</Button>
 										<Button
 											variant="outline"
 											size="lg"
 											asChild
-											className="h-10 text-sm bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300"
+											className="h-9 sm:h-10 text-xs sm:text-sm bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border-slate-200/50 dark:border-slate-700/50 hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300"
 										>
 											<a
 												href={`https://github.com/${decodedOwner}/${decodedRepo}`}
 												target="_blank"
 												rel="noopener noreferrer"
-												className="flex items-center gap-2"
+												className="flex items-center gap-1.5 sm:gap-2"
 											>
-												<ExternalLink className="w-3 h-3" />
+												<ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
 												View on GitHub
 											</a>
 										</Button>
@@ -253,49 +256,49 @@ export default async function PassportPage({ params }: PassportPageProps) {
 		: "border-red-200 dark:border-red-800";
 
 	return (
-		<div className="h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30 relative overflow-hidden">
+		<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30 relative overflow-hidden">
 			{/* Luxury background elements */}
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.05),transparent_50%)]" />
 			<div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.03),transparent_50%)]" />
 
-			<div className="container mx-auto px-6 py-3 h-full flex flex-col relative">
-				<div className="max-w-6xl mx-auto flex-1 flex flex-col justify-center space-y-3">
+			<div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 min-h-screen flex flex-col relative">
+				<div className="max-w-6xl mx-auto flex-1 flex flex-col justify-center space-y-3 sm:space-y-4">
 					{/* Header */}
 					<div className="text-center">
-						<div className="flex items-center justify-center gap-4 mb-4">
+						<div className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
 							<div className="relative group">
-								<div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-								<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-3 border border-white/20 dark:border-slate-700/50 shadow-xl">
-									<Shield className="h-8 w-8 text-slate-600 dark:text-slate-300" />
-									<div className="absolute -top-1 -right-1 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full p-1 shadow-lg">
-										<Github className="h-3 w-3 text-white" />
+								<div className="absolute -inset-1.5 sm:-inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-full blur-md sm:blur-lg group-hover:blur-lg sm:group-hover:blur-xl transition-all duration-500" />
+								<div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-full p-2.5 sm:p-3 border border-white/20 dark:border-slate-700/50 shadow-xl">
+									<Shield className="h-6 w-6 sm:h-8 sm:w-8 text-slate-600 dark:text-slate-300" />
+									<div className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full p-0.5 sm:p-1 shadow-lg">
+										<Github className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
 									</div>
-									<Sparkles className="h-2.5 w-2.5 text-amber-500 absolute -top-0.5 -left-0.5 animate-pulse" />
+									<Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-amber-500 absolute -top-0.5 -left-0.5 animate-pulse" />
 								</div>
 							</div>
-							<div className="h-0.5 w-16 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-full" />
+							<div className="h-0.5 w-12 sm:w-16 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 rounded-full" />
 						</div>
 
-						<h1 className="text-3xl lg:text-4xl xl:text-5xl font-elegant font-medium leading-tight mb-4">
+						<h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-elegant font-medium leading-tight mb-3 sm:mb-4">
 							<span className="bg-gradient-to-r from-slate-600 via-blue-500 to-emerald-500 dark:from-slate-200 dark:via-blue-300 dark:to-emerald-300 bg-clip-text text-transparent">
 								Humanity
 							</span>
-							<span className="text-2xl lg:text-3xl xl:text-4xl mx-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+							<span className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl mx-2 sm:mx-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
 								+
 							</span>
 							<span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
 								Passport
 							</span>
 						</h1>
-						<div className="flex items-center justify-center gap-2 mb-4">
-							<p className="text-sm text-slate-500 dark:text-slate-400 font-mono bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20 dark:border-slate-700/50 shadow-lg">
+						<div className="flex items-center justify-center gap-2 mb-3 sm:mb-4 flex-wrap">
+							<p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full px-2.5 sm:px-3 py-1 sm:py-1.5 border border-white/20 dark:border-slate-700/50 shadow-lg break-all">
 								{decodedOwner}/{decodedRepo}
 							</p>
 							<Button
 								variant="ghost"
 								size="sm"
 								asChild
-								className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/50 hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300 h-7 w-7 p-0"
+								className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-white/20 dark:border-slate-700/50 hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300 h-6 w-6 sm:h-7 sm:w-7 p-0"
 							>
 								<a
 									href={`https://github.com/${decodedOwner}/${decodedRepo}`}
@@ -303,7 +306,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 									rel="noopener noreferrer"
 									className="flex items-center justify-center"
 								>
-									<ExternalLink className="w-3 h-3" />
+									<ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
 								</a>
 							</Button>
 						</div>
@@ -311,16 +314,20 @@ export default async function PassportPage({ params }: PassportPageProps) {
 
 					{/* Verdict Summary */}
 					<Card className={`${verdictBg} ${verdictBorder}`}>
-						<CardHeader>
-							<div className="flex items-center justify-center gap-3">
-								<VerdictIcon className={`w-8 h-8 ${verdictColor}`} />
+						<CardHeader className="pb-4 sm:pb-6">
+							<div className="flex items-center justify-center gap-2 sm:gap-3">
+								<VerdictIcon
+									className={`w-6 h-6 sm:w-8 sm:h-8 ${verdictColor} flex-shrink-0`}
+								/>
 								<div className="text-center">
-									<CardTitle className={`text-lg sm:text-xl ${verdictColor}`}>
+									<CardTitle
+										className={`text-base sm:text-lg lg:text-xl ${verdictColor}`}
+									>
 										{isApproved
 											? "Humanity Passport Approved"
 											: "Not Approved for Humanity Passport"}
 									</CardTitle>
-									<CardDescription className="mt-1 text-sm">
+									<CardDescription className="mt-1 text-xs sm:text-sm">
 										{isApproved
 											? "This repository contributes positively to humanity"
 											: "This repository does not meet the criteria for positive impact"}
@@ -331,39 +338,39 @@ export default async function PassportPage({ params }: PassportPageProps) {
 					</Card>
 
 					{/* Main Content Grid */}
-					<div className="grid lg:grid-cols-2 gap-3 items-stretch">
+					<div className="grid lg:grid-cols-2 gap-3 sm:gap-4 items-stretch">
 						{/* Analysis Details */}
 						<div className="relative h-full">
-							<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-xl blur-lg" />
+							<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-lg sm:rounded-xl blur-md sm:blur-lg" />
 							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl flex flex-col h-full">
-								<CardHeader className="pb-3 h-24">
-									<CardTitle className="flex items-center gap-2 text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-										<div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-full p-1.5">
-											<span className="text-sm text-white">📋</span>
+								<CardHeader className="pb-2 sm:pb-3 min-h-[5rem] sm:min-h-[6rem]">
+									<CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
+										<div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
+											<span className="text-xs sm:text-sm text-white">📋</span>
 										</div>
 										Detailed Analysis
 									</CardTitle>
-									<CardDescription className="text-sm text-slate-500 dark:text-slate-400">
+									<CardDescription className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
 										AI-powered evaluation of this repository's impact on
 										humanity
 									</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-3 flex-1 flex flex-col pt-0">
+								<CardContent className="space-y-2 sm:space-y-3 flex-1 flex flex-col pt-0">
 									<div className="prose dark:prose-invert max-w-none flex-1">
 										<div className="relative h-full">
-											<div className="absolute -inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-lg blur-sm" />
-											<div className="relative bg-gradient-to-br from-slate-50/80 to-blue-50/80 dark:from-slate-950/30 dark:to-blue-950/30 backdrop-blur-sm rounded-lg p-4 border border-slate-200/30 dark:border-slate-700/30 h-full flex items-start">
-												<p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed flex-1">
+											<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-md sm:rounded-lg blur-sm" />
+											<div className="relative bg-gradient-to-br from-slate-50/80 to-blue-50/80 dark:from-slate-950/30 dark:to-blue-950/30 backdrop-blur-sm rounded-md sm:rounded-lg p-3 sm:p-4 border border-slate-200/30 dark:border-slate-700/30 h-full flex items-start">
+												<p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed flex-1">
 													{analysis.details}
 												</p>
 											</div>
 										</div>
 									</div>
-									<div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200/50 dark:border-slate-700/50 mt-auto">
-										<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1">
-											<Calendar className="w-2.5 h-2.5 text-white" />
+									<div className="flex items-center gap-1.5 sm:gap-2 text-xs text-slate-500 dark:text-slate-400 pt-1.5 sm:pt-2 border-t border-slate-200/50 dark:border-slate-700/50 mt-auto">
+										<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-0.5 sm:p-1 flex-shrink-0">
+											<Calendar className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" />
 										</div>
-										<span className="font-medium">
+										<span className="font-medium text-xs">
 											Analyzed on{" "}
 											{new Date(analysis.createdAt).toLocaleDateString(
 												"en-US",
@@ -380,27 +387,27 @@ export default async function PassportPage({ params }: PassportPageProps) {
 						</div>
 
 						{/* Badge Embed Code */}
-						<div className="relative h-full">
-							<div className="absolute -inset-1 bg-gradient-to-r from-emerald-600/20 via-blue-600/20 to-purple-600/20 rounded-xl blur-lg" />
+						<div className="relative h-full mt-4 lg:mt-0">
+							<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-emerald-600/20 via-blue-600/20 to-purple-600/20 rounded-lg sm:rounded-xl blur-md sm:blur-lg" />
 							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl flex flex-col h-full">
-								<CardHeader className="pb-3 h-24">
-									<CardTitle className="flex items-center gap-2 text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
-										<div className="bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full p-1.5">
-											<span className="text-sm text-white">🏷️</span>
+								<CardHeader className="pb-2 sm:pb-3 min-h-[5rem] sm:min-h-[6rem]">
+									<CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
+										<div className="bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
+											<span className="text-xs sm:text-sm text-white">🏷️</span>
 										</div>
 										Embed Your Badge
 									</CardTitle>
-									<CardDescription className="text-sm text-slate-500 dark:text-slate-400">
+									<CardDescription className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
 										Add this badge to your repository's README to showcase your
 										Humanity Passport
 									</CardDescription>
 								</CardHeader>
-								<CardContent className="space-y-3 flex-1 flex flex-col pt-0">
+								<CardContent className="space-y-2 sm:space-y-3 flex-1 flex flex-col pt-0">
 									{/* Humanity Passport Badge - aligned with detailed analysis container */}
 									<div className="prose dark:prose-invert max-w-none flex-1">
 										<div className="relative h-full">
-											<div className="absolute -inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-lg blur-sm" />
-											<div className="relative bg-gradient-to-br from-slate-50/80 to-blue-50/80 dark:from-slate-950/30 dark:to-blue-950/30 backdrop-blur-sm rounded-lg p-4 border border-slate-200/30 dark:border-slate-700/30 h-full flex justify-center items-center">
+											<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-md sm:rounded-lg blur-sm" />
+											<div className="relative bg-gradient-to-br from-slate-50/80 to-blue-50/80 dark:from-slate-950/30 dark:to-blue-950/30 backdrop-blur-sm rounded-md sm:rounded-lg p-3 sm:p-4 border border-slate-200/30 dark:border-slate-700/30 h-full flex justify-center items-center">
 												<Badge
 													owner={decodedOwner}
 													repo={decodedRepo}
@@ -410,14 +417,14 @@ export default async function PassportPage({ params }: PassportPageProps) {
 											</div>
 										</div>
 									</div>
-									<div className="space-y-3">
+									<div className="space-y-2 sm:space-y-3">
 										<p className="text-xs font-medium text-slate-600 dark:text-slate-300 uppercase tracking-wide">
 											Markdown code:
 										</p>
 										<div className="relative">
-											<div className="absolute -inset-1 bg-gradient-to-r from-slate-600/10 to-emerald-600/10 rounded-lg blur-sm" />
-											<div className="relative bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-lg p-3 font-mono text-xs border border-slate-200/50 dark:border-slate-700/50">
-												<code className="text-slate-800 dark:text-slate-200 break-all block pr-20">
+											<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-slate-600/10 to-emerald-600/10 rounded-md sm:rounded-lg blur-sm" />
+											<div className="relative bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-md sm:rounded-lg p-2.5 sm:p-3 font-mono text-xs border border-slate-200/50 dark:border-slate-700/50">
+												<code className="text-slate-800 dark:text-slate-200 break-all block pr-16 sm:pr-20 text-xs">
 													{badgeMarkdown}
 												</code>
 												<CopyButton text={badgeMarkdown} />
@@ -427,17 +434,17 @@ export default async function PassportPage({ params }: PassportPageProps) {
 
 									{isApproved && (
 										<div className="relative flex-1 flex items-start">
-											<div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-lg blur-sm" />
-											<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-lg p-4 border border-blue-200/30 dark:border-blue-800/30 w-full">
-												<div className="flex items-start gap-3">
-													<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1.5 flex-shrink-0">
-														<Sparkles className="h-3 w-3 text-white" />
+											<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-blue-600/10 to-emerald-600/10 rounded-md sm:rounded-lg blur-sm" />
+											<div className="relative bg-gradient-to-br from-blue-50/80 to-emerald-50/80 dark:from-blue-950/30 dark:to-emerald-950/30 backdrop-blur-sm rounded-md sm:rounded-lg p-3 sm:p-4 border border-blue-200/30 dark:border-blue-800/30 w-full">
+												<div className="flex items-start gap-2 sm:gap-3">
+													<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
+														<Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
 													</div>
 													<div className="text-xs text-blue-800 dark:text-blue-200">
-														<p className="font-semibold mb-1 text-sm">
+														<p className="font-semibold mb-1 text-xs sm:text-sm">
 															Pro tip:
 														</p>
-														<p className="leading-relaxed">
+														<p className="leading-relaxed text-xs">
 															{getProTipMessage(
 																analysis.verdict,
 																analysis.details,

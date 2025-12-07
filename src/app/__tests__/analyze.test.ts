@@ -39,6 +39,9 @@ vi.mock("@/lib/llm", () => {
 			strengths: ["docs"],
 			concerns: [],
 		})),
+		processGithubRepository: vi.fn(
+			async (_repoUrl: string) => "Mock repository summary",
+		),
 		GroqApiError: class extends Error {
 			status?: number;
 			code?: string;

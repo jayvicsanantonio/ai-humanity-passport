@@ -66,8 +66,13 @@ describe("PassportPage", () => {
 
 		render(component);
 
-		expect(screen.getByText("Humanity Passport")).toBeInTheDocument();
-		expect(screen.getByText("testowner/testrepo")).toBeInTheDocument();
+		// Check for the header text (split across spans)
+		expect(screen.getByText("Humanity")).toBeInTheDocument();
+		expect(screen.getByText("Passport")).toBeInTheDocument();
+
+		// Check for repo name (appears in multiple places, use getAllBy)
+		expect(screen.getAllByText("testowner/testrepo").length).toBeGreaterThan(0);
+
 		expect(screen.getByText("Humanity Passport Approved")).toBeInTheDocument();
 		expect(
 			screen.getByText(
@@ -119,15 +124,12 @@ describe("PassportPage", () => {
 
 		render(component);
 
-		expect(screen.getByText("Repository Not Analyzed")).toBeInTheDocument();
 		expect(
-			screen.getByText((_content, element) => {
-				return (
-					element?.textContent ===
-					"The repository unknown/repo has not been analyzed yet."
-				);
-			}),
+			screen.getByText("Repository Awaiting Analysis"),
 		).toBeInTheDocument();
+		// Repo name appears in multiple places (header + message)
+		expect(screen.getAllByText(/unknown\/repo/).length).toBeGreaterThan(0);
+		expect(screen.getByText(/has not been analyzed yet/)).toBeInTheDocument();
 		expect(screen.getByText("Analyze Repository")).toBeInTheDocument();
 	});
 
@@ -150,7 +152,10 @@ describe("PassportPage", () => {
 
 		render(component);
 
-		expect(screen.getByText("test-owner/test.repo")).toBeInTheDocument();
+		// Repo name appears in multiple places, use getAllBy
+		expect(screen.getAllByText("test-owner/test.repo").length).toBeGreaterThan(
+			0,
+		);
 		expect(prisma.analysis.findFirst).toHaveBeenCalledWith({
 			where: {
 				owner: "test-owner",
@@ -170,7 +175,9 @@ describe("PassportPage", () => {
 
 		render(component);
 
-		expect(screen.getByText("Repository Not Analyzed")).toBeInTheDocument();
+		expect(
+			screen.getByText("Repository Awaiting Analysis"),
+		).toBeInTheDocument();
 	});
 
 	it("generates correct badge markdown", async () => {

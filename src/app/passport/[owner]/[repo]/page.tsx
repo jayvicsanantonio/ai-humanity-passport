@@ -340,7 +340,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 					</Card>
 
 					{/* Main Content Grid */}
-					<div className="grid lg:grid-cols-2 gap-3 sm:gap-4 items-stretch">
+					<div className="grid lg:grid-cols-2 gap-3 sm:gap-4 items-start">
 						{/* Analysis Details */}
 						<div className="relative h-full">
 							<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 rounded-lg sm:rounded-xl blur-md sm:blur-lg" />
@@ -396,9 +396,9 @@ export default async function PassportPage({ params }: PassportPageProps) {
 						</div>
 
 						{/* Badge Embed Code */}
-						<div className="relative h-full mt-4 lg:mt-0">
+						<div className="relative mt-4 lg:mt-0 lg:sticky lg:top-8">
 							<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-emerald-600/20 via-blue-600/20 to-purple-600/20 rounded-lg sm:rounded-xl blur-md sm:blur-lg" />
-							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl flex flex-col h-full">
+							<Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/20 dark:border-slate-700/50 shadow-2xl flex flex-col">
 								<CardHeader className="pb-2 sm:pb-3 min-h-[5rem] sm:min-h-[6rem]">
 									<CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
 										<div className="bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">

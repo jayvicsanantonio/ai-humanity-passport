@@ -161,14 +161,13 @@ export async function summarizeRepository(
 	},
 ): Promise<string> {
 	const modelId = options?.model ?? "gpt-5-nano";
-	const temperature = options?.temperature ?? 0.2;
+
 	const _maxTokens = options?.maxTokens ?? 1024;
 	const msg = buildSummaryMessage(input.doc);
 
 	const { text } = await generateText({
 		model: openai(modelId),
 		messages: msg,
-		temperature,
 		maxRetries: options?.attempts ?? 3,
 	});
 
@@ -191,7 +190,7 @@ export async function analyzeRepository(
 	},
 ): Promise<AnalysisResult> {
 	const modelId = options?.model ?? "gpt-5-nano";
-	const temperature = options?.temperature ?? 0.2;
+
 	const _maxTokens = options?.maxTokens ?? 1024;
 
 	const messages = buildAnalysisMessages(input);
@@ -200,7 +199,6 @@ export async function analyzeRepository(
 		model: openai(modelId),
 		schema: AnalysisSchema,
 		messages,
-		temperature,
 		maxRetries: options?.attempts ?? 3,
 	});
 

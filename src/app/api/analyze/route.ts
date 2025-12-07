@@ -1,5 +1,5 @@
 import { z } from "zod";
-import prisma from "@/lib/db";
+import { prisma } from "@/lib/db";
 import {
 	createGitHubClient,
 	fetchRepoData,
@@ -9,6 +9,7 @@ import { analyzeRepository, processGithubRepository } from "@/lib/llm";
 import { parseGitHubUrl, validateGitHubUrl } from "@/lib/validation";
 
 export const runtime = "nodejs";
+export const maxDuration = 60; // Allow 60 seconds for processing
 
 // Simple in-memory rate limiter (per-IP, sliding window)
 const RL_MAX_ENV = process.env.RATE_LIMIT_MAX;
@@ -117,20 +118,14 @@ export async function POST(request: Request) {
 	const ownerLc = owner.toLowerCase();
 	const repoLc = repo.toLowerCase();
 
+	console.log(`[POST /api/analyze] Received request for: ${owner}/${repo}`);
+
 	try {
 		const octokit = createGitHubClient();
 		// Use original casing for GitHub API fetch (API is case-insensitive, but original is fine)
 		const { metadata, readme } = await fetchRepoData(octokit, owner, repo);
 
-		let summary: string | null = null;
-		const skipSummary =
-			(
-				process.env.SAVE_GROK_TOKENS_AND_AVOID_GITHUBAPI_RATE_LIMIT ?? ""
-			).toLowerCase() === "true";
-
-		if (!skipSummary) {
-			summary = await processGithubRepository(repoUrl);
-		}
+		const summary: string | null = await processGithubRepository(repoUrl);
 
 		const analysis = await analyzeRepository(null, {
 			metadata,
@@ -151,6 +146,8 @@ export async function POST(request: Request) {
 				details: analysis.details,
 			},
 		});
+
+		console.log(`[POST /api/analyze] Completed analysis for: ${owner}/${repo}`);
 
 		return json(
 			{

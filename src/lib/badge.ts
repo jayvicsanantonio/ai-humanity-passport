@@ -1,6 +1,6 @@
 export type BadgeState = "approved" | "rejected" | "pending";
 
-export interface BadgeOptions {
+interface BadgeOptions {
 	owner: string;
 	repo: string;
 	state: BadgeState;

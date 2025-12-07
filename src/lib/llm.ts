@@ -2,18 +2,18 @@ import { openai } from "@ai-sdk/openai";
 import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { generateObject, generateText } from "ai";
+import pLimit from "p-limit";
 import { z } from "zod";
 import type { RepoMetadata } from "@/lib/github";
 
-export type AnalysisVerdict = "approved" | "rejected";
+type AnalysisVerdict = "approved" | "rejected";
 
-export interface AnalysisResult {
+interface AnalysisResult {
 	verdict: AnalysisVerdict;
 	details: string;
 	strengths?: string[];
 	concerns?: string[];
 }
-
 // Zod schema for the analysis result
 const AnalysisSchema = z.object({
 	verdict: z.enum(["approved", "rejected"]),
@@ -22,13 +22,13 @@ const AnalysisSchema = z.object({
 	concerns: z.array(z.string()).optional(),
 });
 
-export function truncate(text: string, max = 6000): string {
+function truncate(text: string, max = 6000): string {
 	if (!text) return "";
 	if (text.length <= max) return text;
 	return `${text.slice(0, max)}\n...\n[truncated]`;
 }
 
-export function buildSummaryMessage(doc: { pageContent: string }) {
+function buildSummaryMessage(doc: { pageContent: string }) {
 	const system =
 		"You are an assistant that summarizes code into plain text. Focus on what the code does and any potential social or ethical impact.";
 	return [
@@ -70,26 +70,80 @@ ${summary ?? ""}`;
 export async function processGithubRepository(
 	repoUrl: string,
 ): Promise<string> {
-	// 1. Load repo files
+	// 1. Load repo files with selective filtering
+	console.log(`[processGithubRepository] Starting processing for: ${repoUrl}`);
 	const loader = new GithubRepoLoader(repoUrl, {
 		branch: "main",
 		recursive: true,
+		ignoreFiles: [
+			"package-lock.json",
+			"yarn.lock",
+			"pnpm-lock.yaml",
+			"bun.lockb",
+			"*.svg",
+			"*.png",
+			"*.jpg",
+			"*.jpeg",
+			"*.gif",
+			"*.ico",
+			"*.json", // often data files, not logic
+			"dist/**",
+			"build/**",
+			".next/**",
+			"node_modules/**",
+			"**/.*", // Ignore everything in a dot file or dot folder
+		],
 	});
+
+	// Load docs and filter out extremely large files or irrelevant ones if needed
 	const docs = await loader.load();
+	console.log(`[processGithubRepository] Loaded ${docs.length} files.`);
+
+	const relevantDocs = docs.filter((doc) => doc.pageContent.length < 50000); // Skip huge files
+	console.log(
+		`[processGithubRepository] Filtered to ${relevantDocs.length} relevant files (removed ${docs.length - relevantDocs.length} large files).`,
+	);
 
 	// 2. Split into chunks
 	const splitter = new RecursiveCharacterTextSplitter({
-		chunkSize: 2000,
+		chunkSize: 4000, // Increased chunk size to reduce number of calls
 		chunkOverlap: 200,
 	});
-	const splitDocs = await splitter.splitDocuments(docs);
+	const splitDocs = await splitter.splitDocuments(relevantDocs);
+	console.log(
+		`[processGithubRepository] Split into ${splitDocs.length} chunks.`,
+	);
 
-	// 3. Map step: summarize each chunk
-	const summaries: string[] = [];
-	for (const doc of splitDocs) {
-		const summary = await summarizeRepository(null, { doc });
-		summaries.push(summary);
+	// Limit to a reasonable number of chunks to prevent timeouts
+	const MAX_CHUNKS = 20;
+	const chunksToProcess = splitDocs.slice(0, MAX_CHUNKS);
+	if (splitDocs.length > MAX_CHUNKS) {
+		console.log(
+			`[processGithubRepository] Limiting to first ${MAX_CHUNKS} chunks (dropped ${splitDocs.length - MAX_CHUNKS}).`,
+		);
 	}
+
+	// 3. Map step: summarize each chunk deeply in parallel
+	console.log(
+		`[processGithubRepository] Starting parallel summarization of ${chunksToProcess.length} chunks...`,
+	);
+	const limit = pLimit(5); // Concurrency limit
+	let completed = 0;
+	const summaryPromises = chunksToProcess.map((doc, index) =>
+		limit(async () => {
+			const start = Date.now();
+			const res = await summarizeRepository(null, { doc });
+			completed++;
+			console.log(
+				`[processGithubRepository] Chunk ${index + 1}/${chunksToProcess.length} summarized in ${Date.now() - start}ms. (${completed}/${chunksToProcess.length})`,
+			);
+			return res;
+		}),
+	);
+
+	const summaries = await Promise.all(summaryPromises);
+	console.log(`[processGithubRepository] All chunks summarized.`);
+
 	// 4. Reduce step: combine into a single summary
 	return summaries.join("\n\n");
 }

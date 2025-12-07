@@ -1,11 +1,28 @@
 import { describe, expect, it, vi } from "vitest";
 import type { RepoMetadata } from "@/lib/github";
 import {
-	type AnalysisResult,
-	analyzeRepositoryWithGroq,
+	analyzeRepository,
 	buildAnalysisMessages,
-	parseGroqAnalysisText,
+	summarizeRepository,
 } from "@/lib/llm";
+
+// Mock the 'ai' module
+vi.mock("ai", () => ({
+	generateText: vi.fn(async () => ({ text: "Mock summary" })),
+	generateObject: vi.fn(async () => ({
+		object: {
+			verdict: "approved",
+			details: "Mock details",
+			strengths: ["strength1"],
+			concerns: ["concern1"],
+		},
+	})),
+}));
+
+// Mock @ai-sdk/openai
+vi.mock("@ai-sdk/openai", () => ({
+	openai: vi.fn(() => ({})),
+}));
 
 function makeMeta(): RepoMetadata {
 	return {
@@ -33,85 +50,23 @@ describe("llm prompt builder", () => {
 	});
 });
 
-describe("parseGroqAnalysisText", () => {
-	it("parses plain JSON content", () => {
-		const content = JSON.stringify({
-			verdict: "approved",
-			details: "Looks good",
-			strengths: ["docs"],
-			concerns: ["none"],
+describe("summarizeRepository", () => {
+	it("calls generateText and returns text", async () => {
+		const result = await summarizeRepository(null, {
+			doc: { pageContent: "code" },
 		});
-		const result = parseGroqAnalysisText(content);
-		expect(result.verdict).toBe("approved");
-		expect(result.details).toContain("Looks good");
-	});
-
-	it("parses fenced JSON blocks", () => {
-		const content =
-			'```json\n{\n  "verdict": "rejected",\n  "details": "Problematic"\n}\n```';
-		const result = parseGroqAnalysisText(content);
-		expect(result.verdict).toBe("rejected");
-	});
-
-	it("rejects invalid verdicts", () => {
-		const content = JSON.stringify({ verdict: "maybe", details: "hmm" });
-		expect(() => parseGroqAnalysisText(content)).toThrow();
+		expect(result).toBe("Mock summary");
 	});
 });
 
-describe("analyzeRepositoryWithGroq", () => {
-	it("returns parsed result from client", async () => {
-		const fake = {
-			chat: {
-				completions: {
-					create: vi.fn().mockResolvedValue({
-						choices: [
-							{
-								message: {
-									content: JSON.stringify({
-										verdict: "approved",
-										details: "ok",
-									}),
-								},
-							},
-						],
-					}),
-				},
-			},
-		};
-
-		const res = await analyzeRepositoryWithGroq(fake as any, {
+describe("analyzeRepository", () => {
+	it("calls generateObject and returns object", async () => {
+		const result = await analyzeRepository(null, {
 			metadata: makeMeta(),
-			readme: "",
+			readme: "README",
+			summary: "Summary",
 		});
-		expect(res.verdict).toBe("approved");
-		expect(fake.chat.completions.create).toHaveBeenCalledTimes(1);
-	});
-
-	it("retries on transient error then succeeds", async () => {
-		const create = vi
-			.fn()
-			.mockRejectedValueOnce(
-				Object.assign(new Error("server error"), { status: 500 }),
-			)
-			.mockResolvedValueOnce({
-				choices: [
-					{
-						message: {
-							content: JSON.stringify({ verdict: "rejected", details: "nope" }),
-						},
-					},
-				],
-			});
-
-		const fake = { chat: { completions: { create } } };
-
-		const res = await analyzeRepositoryWithGroq(
-			fake as any,
-			{ metadata: makeMeta(), readme: "" },
-			{ attempts: 2, baseDelayMs: 1 },
-		);
-		expect(res.verdict).toBe("rejected");
-		expect(create).toHaveBeenCalledTimes(2);
+		expect(result.verdict).toBe("approved");
+		expect(result.details).toBe("Mock details");
 	});
 });

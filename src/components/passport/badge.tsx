@@ -27,6 +27,7 @@ export function Badge({
 	};
 
 	const badgeElement = (
+		// biome-ignore lint/performance/noImgElement: External badge URL
 		<img
 			src={badgeUrl}
 			alt={`Humanity Passport Badge for ${owner}/${repo}`}

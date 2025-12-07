@@ -5,11 +5,7 @@ import {
 	fetchRepoData,
 	GitHubApiError,
 } from "@/lib/github";
-import {
-	analyzeRepositoryWithGroq,
-	GroqApiError,
-	processGithubRepository,
-} from "@/lib/llm";
+import { analyzeRepository, processGithubRepository } from "@/lib/llm";
 import { parseGitHubUrl, validateGitHubUrl } from "@/lib/validation";
 
 export const runtime = "nodejs";
@@ -136,7 +132,7 @@ export async function POST(request: Request) {
 			summary = await processGithubRepository(repoUrl);
 		}
 
-		const analysis = await analyzeRepositoryWithGroq(null, {
+		const analysis = await analyzeRepository(null, {
 			metadata,
 			readme,
 			summary,
@@ -165,7 +161,7 @@ export async function POST(request: Request) {
 			},
 			{ status: 200 },
 		);
-	} catch (err: any) {
+	} catch (err: unknown) {
 		// Map known errors
 		if (err instanceof GitHubApiError) {
 			const status = err.status ?? 502;
@@ -176,19 +172,16 @@ export async function POST(request: Request) {
 			};
 			return json(payload, { status });
 		}
-		if (err instanceof GroqApiError) {
-			const status = err.status ?? (err.retryable ? 503 : 500);
-			const payload: ErrorResponse = {
-				error: err.message,
-				code: err.code ?? "GROQ_API_ERROR",
-				retryable: err.retryable,
-			};
-			return json(payload, { status });
-		}
+		// Generic error handling since we removed GroqApiError
+		// The AI SDK throws standard errors, and we can catch them here if needed
+		// For now, treat them as internal server errors
+		console.error("Analysis failed:", err);
 
 		const payload: ErrorResponse = {
-			error: err?.message ?? "Internal server error",
-			code: "INTERNAL_SERVER_ERROR",
+			// biome-ignore lint/suspicious/noExplicitAny: Accessing message on unknown error
+			error: (err as any)?.message ?? "Internal Server Error",
+			code: "INTERNAL_ERROR",
+			retryable: false,
 		};
 		return json(payload, { status: 500 });
 	}

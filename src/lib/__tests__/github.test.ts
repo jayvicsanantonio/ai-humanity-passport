@@ -8,9 +8,11 @@ function makeFakeOctokit({
 	readmeBase64,
 	errors = {},
 }: {
+	// biome-ignore lint/suspicious/noExplicitAny: Mocking arbitrary data
 	repoData?: any;
 	topics?: string[];
 	readmeBase64?: string | null;
+	// biome-ignore lint/suspicious/noExplicitAny: Mocking arbitrary errors
 	errors?: Partial<Record<"get" | "topics" | "readme", any>>;
 }) {
 	return {
@@ -36,10 +38,14 @@ function makeFakeOctokit({
 			}
 			if (route.includes("/readme")) {
 				if (errors.readme) throw errors.readme;
-				if (readmeBase64 == null)
+				if (readmeBase64 == null) {
+					// biome-ignore lint/suspicious/noExplicitAny: Mocking Octokit response
 					return { data: { encoding: "base64", content: undefined } } as any;
+				}
+				// biome-ignore lint/suspicious/noExplicitAny: Mocking Octokit response
 				return { data: { encoding: "base64", content: readmeBase64 } } as any;
 			}
+			// biome-ignore lint/suspicious/noExplicitAny: Mocking Octokit response
 			return { data: {} } as any;
 		},
 	} as unknown as Octokit;

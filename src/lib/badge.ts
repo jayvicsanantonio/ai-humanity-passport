@@ -17,7 +17,7 @@ function escapeXml(s: string): string {
 // Visual constants (LARGE badge)
 const HEIGHT = 180; // larger, card-like presence for better visibility on regular devices
 const CAP = 120; // left crest cap width
-const PAD = 24; // inner padding
+const _PAD = 24; // inner padding
 const MIN_WIDTH = 100; // minimum overall width for layout balance
 const FONT_STACK = "Inter,Segoe UI,DejaVu Sans,Verdana,Geneva,sans-serif";
 
@@ -42,7 +42,7 @@ function textWidth(text: string, size: number): number {
 }
 
 // Keep small helper for legacy use (not used in large layout, but harmless)
-function measure(_text: string): number {
+function _measure(_text: string): number {
 	return MIN_WIDTH;
 }
 

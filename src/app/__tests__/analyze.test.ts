@@ -4,22 +4,24 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/lib/github", () => {
 	return {
 		createGitHubClient: vi.fn(() => ({})),
+		// biome-ignore lint/suspicious/noExplicitAny: Mocking
 		fetchRepoData: vi.fn(async (_octo: any, owner: string, repo: string) => ({
 			metadata: {
 				owner,
 				repo,
 				description: "desc",
 				stars: 10,
-				topics: ["ai"],
+				topics: ["react"],
 				defaultBranch: "main",
-				htmlUrl: `https://github.com/${owner}/${repo}`,
+				htmlUrl: "http://github.com",
 			},
-			readme: "# Hello\nThis is a README",
+			readme: "readme content",
 		})),
 		GitHubApiError: class extends Error {
 			status?: number;
 			code?: string;
 			retryable?: boolean;
+			// biome-ignore lint/suspicious/noExplicitAny: Mocking error constructor
 			constructor(message: string, opts?: any) {
 				super(message);
 				this.name = "GitHubApiError";
@@ -33,38 +35,28 @@ vi.mock("@/lib/github", () => {
 
 vi.mock("@/lib/llm", () => {
 	return {
-		analyzeRepositoryWithGroq: vi.fn(async (_client: any, _input: any) => ({
+		// biome-ignore lint/suspicious/noExplicitAny: Mocking LLM function
+		analyzeRepository: vi.fn(async (_client: any, _input: any) => ({
 			verdict: "approved",
 			details: "Looks good",
 			strengths: ["docs"],
 			concerns: [],
 		})),
-		processGithubRepository: vi.fn(
-			async (_repoUrl: string) => "Mock repository summary",
-		),
-		GroqApiError: class extends Error {
-			status?: number;
-			code?: string;
-			retryable?: boolean;
-			constructor(message: string, opts?: any) {
-				super(message);
-				this.name = "GroqApiError";
-				this.status = opts?.status;
-				this.code = opts?.code;
-				this.retryable = opts?.retryable;
-			}
-		},
+		processGithubRepository: vi.fn(async () => "Mock summary"),
 	};
 });
 
 vi.mock("@/lib/db", () => {
+	// biome-ignore lint/suspicious/noExplicitAny: Mocking DB
 	const upsert = vi.fn(async (_args: any) => ({ id: 1 }));
+	// biome-ignore lint/suspicious/noExplicitAny: Mocking DB
 	const prisma = { analysis: { upsert } } as any;
 	return { default: prisma, prisma };
 });
 
 import { POST } from "@/app/api/analyze/route";
 
+// biome-ignore lint/suspicious/noExplicitAny: Mocking arbitrary args
 function makeRequest(body: any, ip = "2.2.2.2") {
 	return new Request("http://localhost/api/analyze", {
 		method: "POST",

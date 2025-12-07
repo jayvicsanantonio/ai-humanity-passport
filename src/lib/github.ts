@@ -65,8 +65,9 @@ export async function fetchRepoMetadata(
 			defaultBranch: repoData.default_branch,
 			htmlUrl: repoData.html_url,
 		};
-	} catch (err: any) {
-		const status = err?.status;
+	} catch (err: unknown) {
+		// biome-ignore lint/suspicious/noExplicitAny: Accessing status on unknown error
+		const status = (err as any)?.status;
 		if (status === 404) {
 			throw new GitHubApiError("Repository not found", {
 				status,
@@ -81,7 +82,8 @@ export async function fetchRepoMetadata(
 		}
 		throw new GitHubApiError("Failed to fetch repository metadata", {
 			status,
-			code: err?.code,
+			// biome-ignore lint/suspicious/noExplicitAny: Accessing code on unknown error
+			code: (err as any)?.code,
 		});
 	}
 }
@@ -100,15 +102,18 @@ export async function fetchReadme(
 		});
 
 		// The default response contains base64-encoded content
+		// biome-ignore lint/suspicious/noExplicitAny: Octokit types are complex, casting for access
 		const encoding = (resp.data as any).encoding ?? "base64";
+		// biome-ignore lint/suspicious/noExplicitAny: Octokit types represent union of responses
 		const contentBase64 = (resp.data as any).content as string | undefined;
 		if (!contentBase64) return null;
 
 		return Buffer.from(contentBase64, encoding as BufferEncoding).toString(
 			"utf8",
 		);
-	} catch (err: any) {
-		const status = err?.status;
+	} catch (err: unknown) {
+		// biome-ignore lint/suspicious/noExplicitAny: Accessing status on unknown error
+		const status = (err as any)?.status;
 		if (status === 404) {
 			// README is optional in repos; return null so callers can proceed
 			return null;
@@ -121,7 +126,8 @@ export async function fetchReadme(
 		}
 		throw new GitHubApiError("Failed to fetch README", {
 			status,
-			code: err?.code,
+			// biome-ignore lint/suspicious/noExplicitAny: Accessing code on unknown error
+			code: (err as any)?.code,
 		});
 	}
 }

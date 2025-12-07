@@ -1,11 +1,13 @@
 import {
 	Calendar,
 	CheckCircle,
+	ClipboardList,
 	Clock,
 	ExternalLink,
 	Github,
 	Shield,
 	Sparkles,
+	Tag,
 	XCircle,
 } from "lucide-react";
 import { Badge } from "@/components/passport/badge";
@@ -346,7 +348,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 								<CardHeader className="pb-2 sm:pb-3 min-h-[5rem] sm:min-h-[6rem]">
 									<CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
 										<div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
-											<span className="text-xs sm:text-sm text-white">📋</span>
+											<ClipboardList className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
 										</div>
 										Detailed Analysis
 									</CardTitle>
@@ -360,27 +362,34 @@ export default async function PassportPage({ params }: PassportPageProps) {
 										<div className="relative h-full">
 											<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-slate-600/10 to-blue-600/10 rounded-md sm:rounded-lg blur-sm" />
 											<div className="relative bg-gradient-to-br from-slate-50/80 to-blue-50/80 dark:from-slate-950/30 dark:to-blue-950/30 backdrop-blur-sm rounded-md sm:rounded-lg p-3 sm:p-4 border border-slate-200/30 dark:border-slate-700/30 h-full flex items-start">
-												<p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed flex-1">
+												<p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-words leading-relaxed flex-1">
 													{analysis.details}
 												</p>
 											</div>
 										</div>
 									</div>
-									<div className="flex items-center gap-1.5 sm:gap-2 text-xs text-slate-500 dark:text-slate-400 pt-1.5 sm:pt-2 border-t border-slate-200/50 dark:border-slate-700/50 mt-auto">
-										<div className="bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full p-0.5 sm:p-1 flex-shrink-0">
-											<Calendar className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" />
+									<div className="relative mt-4">
+										<div className="absolute -inset-0.5 sm:-inset-1 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-md sm:rounded-lg blur-sm" />
+										<div className="relative bg-gradient-to-br from-blue-50/80 to-purple-50/80 dark:from-blue-950/30 dark:to-purple-950/30 backdrop-blur-sm rounded-md sm:rounded-lg p-3 sm:p-4 border border-blue-200/30 dark:border-blue-800/30 w-full">
+											<div className="flex items-center gap-2 sm:gap-3">
+												<div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
+													<Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+												</div>
+												<div className="text-xs text-blue-800 dark:text-blue-200">
+													<span className="font-semibold text-xs sm:text-sm">
+														Analyzed on{" "}
+														{new Date(analysis.createdAt).toLocaleDateString(
+															"en-US",
+															{
+																year: "numeric",
+																month: "long",
+																day: "numeric",
+															},
+														)}
+													</span>
+												</div>
+											</div>
 										</div>
-										<span className="font-medium text-xs">
-											Analyzed on{" "}
-											{new Date(analysis.createdAt).toLocaleDateString(
-												"en-US",
-												{
-													year: "numeric",
-													month: "long",
-													day: "numeric",
-												},
-											)}
-										</span>
 									</div>
 								</CardContent>
 							</Card>
@@ -393,7 +402,7 @@ export default async function PassportPage({ params }: PassportPageProps) {
 								<CardHeader className="pb-2 sm:pb-3 min-h-[5rem] sm:min-h-[6rem]">
 									<CardTitle className="flex items-center gap-2 text-lg sm:text-xl font-elegant font-medium bg-gradient-to-r from-slate-600 to-slate-500 dark:from-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
 										<div className="bg-gradient-to-r from-emerald-600 to-blue-600 rounded-full p-1 sm:p-1.5 flex-shrink-0">
-											<span className="text-xs sm:text-sm text-white">🏷️</span>
+											<Tag className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
 										</div>
 										Embed Your Badge
 									</CardTitle>

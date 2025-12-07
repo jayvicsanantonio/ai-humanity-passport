@@ -1,6 +1,14 @@
 "use client";
 
-import { Award, Github, Loader2, Shield, Sparkles, Star } from "lucide-react";
+import {
+	Award,
+	Github,
+	Heart,
+	Loader2,
+	Shield,
+	Sparkles,
+	Star,
+} from "lucide-react";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -264,7 +272,8 @@ export default function Home() {
 						<div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
 					</div>
 					<p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-light px-4">
-						Crafted with <span className="text-red-500 animate-pulse">❤️</span>{" "}
+						Crafted with{" "}
+						<Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse inline-block align-middle" />{" "}
 						to inspire socially responsible software development
 					</p>
 				</footer>

@@ -160,7 +160,7 @@ export async function summarizeRepository(
 		baseDelayMs?: number; // unused
 	},
 ): Promise<string> {
-	const modelId = options?.model ?? "gpt-5-nano";
+	const modelId = options?.model ?? "gpt-4o-mini";
 
 	const _maxTokens = options?.maxTokens ?? 1024;
 	const msg = buildSummaryMessage(input.doc);
@@ -189,7 +189,7 @@ export async function analyzeRepository(
 		baseDelayMs?: number; // unused
 	},
 ): Promise<AnalysisResult> {
-	const modelId = options?.model ?? "gpt-5-nano";
+	const modelId = options?.model ?? "gpt-4o-mini";
 
 	const _maxTokens = options?.maxTokens ?? 1024;
 

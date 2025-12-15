@@ -50,11 +50,23 @@ export default function Home() {
 				body: JSON.stringify({ repoUrl: repoUrl.trim() }),
 			});
 
-			const data = await response.json();
-
 			if (!response.ok) {
-				throw new Error(data.error || "Failed to analyze repository");
+				// Try to parse as JSON for structured error, fall back to text
+				let errorMessage = "Failed to analyze repository";
+				try {
+					const data = await response.json();
+					errorMessage = data.error || errorMessage;
+				} catch {
+					// Response wasn't JSON (e.g., server timeout or crash)
+					const text = await response.text().catch(() => "");
+					if (text) {
+						errorMessage = text.slice(0, 200); // Limit error message length
+					}
+				}
+				throw new Error(errorMessage);
 			}
+
+			const data = await response.json();
 
 			toast.success("Repository analysis complete!", {
 				description: `Analysis for ${data.owner}/${data.repo} is ready.`,

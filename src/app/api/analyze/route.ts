@@ -122,10 +122,16 @@ export async function POST(request: Request) {
 
 	try {
 		const octokit = createGitHubClient();
-		// Use original casing for GitHub API fetch (API is case-insensitive, but original is fine)
 		const { metadata, readme } = await fetchRepoData(octokit, owner, repo);
 
-		const summary: string | null = await processGithubRepository(repoUrl);
+		let summary: string | null = null;
+
+		const skipSummary =
+			(process.env.AVOID_GITHUBAPI_RATE_LIMIT ?? "").toLowerCase() === "true";
+
+		if (!skipSummary) {
+			summary = await processGithubRepository(repoUrl);
+		}
 
 		const analysis = await analyzeRepository(null, {
 			metadata,
